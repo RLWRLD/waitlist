@@ -210,7 +210,7 @@
 	- https://x.com/RLWRLD_ai
 	- https://www.linkedin.com/company/rlwrld/
 - Company links
-	- `/about-us`
+	- `/company`
 	- `/rldx`
 	- `/news`
 		- `/news/15m-seed-funding`
@@ -218,14 +218,15 @@
 		- `/news/honda-partnership`
 		- ... (dynamic news pages)
 	- `/business`
-	- `/lab`
-		- `/lab/research` (special static page - published papers list)
-		- `/lab/whitepaper-robotics-transformation`
-		- `/lab/why-we-build-rfm-in-asia`
-		- `/lab/engineers-thought-on-rfm`
+	  		- `/biz/whitepaper-robotics-transformation` (link)
+	- `/research`
+		- `/research/publications` (special static page - published papers list)
+		- `/research/why-we-build-rfm-in-asia`
+		- `/research/engineers-thought-on-rfm`
 		- ... (dynamic content pages)
 	- `/careers`
 	- `/contact`
+- ((부분은 ideation 중인 부분이므로, 홈페이지에 포함된 문구가 아님.))
 
 ```
 RLWRLD (main page)
@@ -296,7 +297,7 @@ RLWRLD (main page)
 │   │  │  [Learn More] → /business                │
 │   │  └──────────────────────────────────────────┘
 |
-├── LAB Preview
+├── Research Preview
 │   │
 │   │  ┌──────────────────────────────────────────┐
 │   │  │  Research & Insights                     │
@@ -310,7 +311,7 @@ RLWRLD (main page)
 │   │  │  ✍️  Blog & Articles                     │
 │   │  │  🎙️  Podcast Episodes                    │
 │   │  │                                          │
-│   │  │  [Explore Lab] → /lab                    │
+│   │  │  [Explore Research] → /research          │
 │   │  └──────────────────────────────────────────┘
 
 ├── Careers Preview
@@ -372,14 +373,15 @@ Watch the Video
 
 ### How We're Different
 
-**Software-First**
-While others build robot bodies, we build robot brains. Intelligence is the lasting advantage.
+**Five-Finger Dexterity**
+We specialize in dexterous manipulation that mirrors human capability. Most robotics companies focus on simple grippers or rigid end-effectors, but human-level work requires human-like hands. Our five-finger systems handle the delicate, complex tasks that have kept humans irreplaceable—until now.
 
-**Real-World Data**
-Our models learn on factory floors in East Asia, partnering with BMW, KDDI, LG, and Lotte—not in labs with simplified scenarios.
 
-**Five-Finger Mastery**
-We specialize in dexterous manipulation. Human-level work requires human-like hands.
+**Industry Real-World Data**
+Our models learn on actual factory floors in East Asia, partnering with BMW, KDDI, LG, and Lotte—not in labs with simplified scenarios. We train on the messy, unpredictable conditions of real production environments where lighting changes, objects vary, and precision matters. This real-world data is our competitive advantage, creating AI that works where it counts. 
+
+**Hardware-Agnostic Intelligence**
+We build foundation models that work across different robot bodies—our AI isn't locked to a single hardware platform. While others build proprietary robot bodies, we build robot brains that adapt to any manipulator. Intelligence is the lasting advantage, and our models transfer across embodiments, unlocking flexibility and scale.
 
 ---
 
@@ -387,8 +389,15 @@ We specialize in dexterous manipulation. Human-level work requires human-like ha
 
 RLWRLD brings together world-class AI researchers and experienced operators. Our network includes leading professors from KAIST, Seoul National University, Korea University, and POSTECH, alongside industry veterans from global tech companies.
 
-**Leadership:** Jung-Hee Ryu (CEO)
-**Research:** Jinwoo Shin (KAIST)
+[출신 로고 들]
+
+**Leadership:** Jung-Hee Ryu (CEO) "Silicon Valley is building brains for the internet. We're building brains for machines."
+
+Serial entrepreneur with proven exit track record. Founded and sold Ollaworks (acquired by Intel), built Future Play into Korea's leading AI-focused VC, and launched IconLab. Holds 100+ US/Korea patents and KAIST Ph.D. in Electrical Engineering & Computer Science.
+
+**Research:** Jinwoo Shin (KAIST) "We're not just writing papers—we're training models that solve real-world problems on real production floors."
+
+Chair Professor at KAIST AI Graduate School. MIT Ph.D. in Mathematics, recipient of the George M. Sprowls Award for best doctoral thesis in MIT Computer Science. Published breakthrough research in reinforcement learning, world models, and embodied AI at top-tier venues (ICML, CoRL, CVPR).
 
 [View Open Positions]  → `/careers`
 
@@ -419,7 +428,7 @@ RLDX Page (/rldx - separate static page)
 ├── Technical Specs
 └── CTA
     ├── "Request a Demo" → /contact
-    └── "Download RLDX paper" → /lab/how-we-build-rldx
+    └── "Download RLDX paper" → /research/how-we-build-rldx
 ```
 
 ## `/news` 
@@ -523,56 +532,45 @@ RLDX Page (/rldx - separate static page)
 
 ## `/business`
 
-**WE DON'T JUST BUILD TECHNOLOGY. WE DEPLOY IT.**
+**WE DON'T JUST BUILD TECHNOLOGY. WE DEPLOY IT.**  ((비즈팀 리뷰 필요))
 
-RLWRLD partners with industry leaders to bring real-world intelligence to their operations—from assessment to deployment to long-term automation.
+RLWRLD partners with industry leaders to bring real-world intelligence to their operations—from initial assessment to long-term deployment at scale. We align on realistic needs and timelines, building 3-5 year partnerships that grow with your business. Our phased approach combines paid proof-of-concepts, strategic consulting, and data partnerships, ensuring mutual commitment and measurable results at every stage.
 
 ---
 
 ### How We Work
 
 **RX (Robotic Transformation Assessment)**
-We evaluate your operations and identify where intelligent automation delivers the highest impact.
+We evaluate your operations and identify where intelligent automation delivers the highest impact. Our team maps every human task in your facility, analyzing complexity, ROI potential, and implementation timelines. This data-driven assessment creates a roadmap that prioritizes quick wins while building toward comprehensive automation.
 
 **PoC (Proof of Concept)**
-We deploy our technology in your actual environment, proving performance where it matters—on your factory floor.
+We deploy our technology in your actual environment, proving performance where it matters—on your factory floor. Working with real parts, real lighting conditions, and real production constraints, we demonstrate capability before commitment. Our paid PoC model ensures both sides are invested, turning pilots into partnerships rather than science experiments.
 
 **LaaS (Labor-as-a-Service)**
-We provide robots as a service, trained on your workflows, continuously improving with your data.
-
----
-
-### Industries
-
-**Manufacturing**
-Precision assembly, bolt-fastening, connector installation for automotive and electronics.
-
-**Logistics**
-Flexible object handling, sorting, and packaging for warehouses and distribution centers.
-
-**Services**
-Retail automation and hospitality applications requiring human-level dexterity.
+We provide robots as a service, trained on your workflows, continuously improving with your data. Instead of buying hardware that depreciates, you scale robotic labor as your business grows—paying for productive work, not capital equipment. Our models get smarter with every shift, learning from your operations to deliver compound performance gains over 3-5 year partnerships.
 
 ---
 
 ### Our Partners
 
-We work with Asia's industrial leaders who trust us with their most complex automation challenges.
+We work with Asia's industrial leaders who trust us with their most complex automation challenges. (((별도로 로고 노출 허락필요할지도. 비즈팀 리뷰 필요.)))
 
 **BMW** • **KDDI** • **LG Electronics** • **Lotte** • **CJ Logistics** • **Mitsui** • **Shimadzu**
 
 Long-term partnerships built on proven results in real-world deployment.
 
 [Contact Us]  → `/contact` 
+[Business paper]  → `https://www.notion.so/biz-paper-Dexterity-is-Intelligence-2696cbdff6f6801c9af2f69b97b7287b?source=copy_link` 
 
 
-## `/lab`
+## `/research`
 
 **[페이지 컨셉]**
 RLWRLD의 연구 성과와 기술적 인사이트를 공유하는 허브. 논문, 백서, 블로그, 팟캐스트를 통해 Physical AI와 로보틱스의 최전선을 탐구한다. 우리가 어떻게 문제를 해결하는지, 왜 이 방식이 중요한지를 보여주는 사고 리더십(Thought Leadership) 플랫폼.
 
+
 ```
-├── Lab (/lab - Index Page)
+├── Research (/research - Index Page)
 │   │
 │   │  ┌──────────────────────────────────────────┐
 │   │  │  Research & Insights                     │
@@ -588,21 +586,21 @@ RLWRLD의 연구 성과와 기술적 인사이트를 공유하는 허브. 논문
 │   │  │  │ Date    │ │ Date    │ │ Date    │    │
 │   │  │  │ Summary │ │ Summary │ │ Summary │    │
 │   │  │  │ [Read→] │ │ [Read→] │ │ [Listen]│    │
-│   │  │  │ /lab/   │ │ /lab/   │ │ /lab/   │    │
+│   │  │  │ /research/│ │ /research/│ │ /research/│    │
 │   │  │  │ [slug]  │ │ [slug]  │ │ [slug]  │    │
 │   │  │  └─────────┘ └─────────┘ └─────────┘    │
 │   │  │                                          │
 │   │  │  Special Section:                        │
 │   │  │  📚 [View Published Papers] →            │
-│   │  │      /lab/research                       │
+│   │  │      /research/publications              │
 │   │  └──────────────────────────────────────────┘
 │   │
 │   ├── Special: Research Static Page
 │   │   │
-│   │   └── /lab/research
+│   │   └── /research/publications
 │   │       │
 │   │       │  ┌────────────────────────────────────┐
-│   │       │  │  ← Back to Lab                     │
+│   │       │  │  ← Back to Research                │
 │   │       │  │                                    │
 │   │       │  │  📚 Published Research             │
 │   │       │  │                                    │
@@ -622,10 +620,10 @@ RLWRLD의 연구 성과와 기술적 인사이트를 공유하는 허브. 논문
 │   │
 │   └── Click content card → Individual Content Page
 │       │
-│       ├── /lab/whitepaper-robotics-transformation
+│       ├── /research/whitepaper-robotics-transformation
 │       │   │
 │       │   │  ┌────────────────────────────────────┐
-│       │   │  │  ← Back to Lab                     │
+│       │   │  │  ← Back to Research                │
 │       │   │  │                                    │
 │       │   │  │  📄 Whitepaper                     │
 │       │   │  │  The Future of Robotics            │
@@ -640,14 +638,14 @@ RLWRLD의 연구 성과와 기술적 인사이트를 공유하는 허브. 논문
 │       │   │  │  📥 [Download PDF]                 │
 │       │   │  │                                    │
 │       │   │  │  Related Content:                  │
-│       │   │  │  [card → /lab/slug1]               │
-│       │   │  │  [card → /lab/slug2]               │
+│       │   │  │  [card → /research/slug1]          │
+│       │   │  │  [card → /research/slug2]          │
 │       │   │  └────────────────────────────────────┘
 │       │
-│       ├── /lab/why-we-build-rfm-in-asia
+│       ├── /research/why-we-build-rfm-in-asia
 │       │   │
 │       │   │  ┌────────────────────────────────────┐
-│       │   │  │  ← Back to Lab                     │
+│       │   │  │  ← Back to Research                │
 │       │   │  │                                    │
 │       │   │  │  ✍️  Blog                          │
 │       │   │  │  Why We Build RFM in Asia          │
@@ -661,13 +659,13 @@ RLWRLD의 연구 성과와 기술적 인사이트를 공유하는 허브. 논문
 │       │   │  │  Share: [X] [LinkedIn]             │
 │       │   │  │                                    │
 │       │   │  │  Related Content:                  │
-│       │   │  │  [card → /lab/slug1]               │
+│       │   │  │  [card → /research/slug1]          │
 │       │   │  └────────────────────────────────────┘
 │       │
-│       ├── /lab/engineers-thought-on-rfm
+│       ├── /research/engineers-thought-on-rfm
 │       │   │
 │       │   │  ┌────────────────────────────────────┐
-│       │   │  │  ← Back to Lab                     │
+│       │   │  │  ← Back to Research                │
 │       │   │  │                                    │
 │       │   │  │  🎙️  Podcast                       │
 │       │   │  │  Our Engineers' Thought on RFM     │
@@ -685,14 +683,14 @@ RLWRLD의 연구 성과와 기술적 인사이트를 공유하는 허브. 논문
 │       │   │  │  (outbound links)                  │
 │       │   │  │                                    │
 │       │   │  │  Related Episodes:                 │
-│       │   │  │  [card → /lab/slug1]               │
+│       │   │  │  [card → /research/slug1]          │
 │       │   │  └────────────────────────────────────┘
 │       │
 │       └── ... (unique URL + static page per content)
 ```
 
 
-### `/lab/research`
+### `/research/publications`
 
 
 - List of papers
@@ -700,52 +698,67 @@ RLWRLD의 연구 성과와 기술적 인사이트를 공유하는 허브. 논문
 	- paper 2
 	- paper 3
 
-### `/lab/[slug]`
+### `/research/[slug]`
 
 **URL 예시**:
- - /lab/whitepaper-robotics-transformation
- - /lab/why-we-build-rfm-in-asia
- - /lab/engineers-thought-on-rfm
+ - /research/whitepaper-robotics-transformation
+ - /research/why-we-build-rfm-in-asia
+ - /research/engineers-thought-on-rfm
 
 
 ##  `/careers`
 
-**WE'RE BUILDING THE TEAM THAT BUILDS REAL-WORLD INTELLIGENCE.**
+**WE'RE NOT JUST HIRING — WE'RE BUILDING THE TEAM THAT BUILDS REAL-WORLD INTELLIGENCE.**
 
-At RLWRLD, you'll work on the hardest problems in robotics and AI—not in a lab, but on factory floors with BMW, KDDI, LG, and Lotte. If you move fast, think deeply, and want your work deployed at scale, we want to work with you.
+At RLWRLD, you'll work on some of the hardest problems in robotics and AI—not in a lab, but on real factory floors with BMW, KDDI, LG, and Lotte. You'll work alongside exceptional minds across research, engineering, product, and operations—people who move fast, think deeply, and execute precisely.
+
+If you're ready to push boundaries, see your work deployed at scale, and bring real-world intelligence to life, we want to work with you.
+
+---
+
+### Our Team
+
+RLWRLD is built by a multidisciplinary team of experts—from world-class AI researchers and roboticists to product engineers, business strategists, and operators.
+
+We bring together leading professors from KAIST, Seoul National University, Korea University, and POSTECH, alongside industry veterans from Google, Meta, Kakao, and global tech companies. This unique combination of deep technical expertise and real-world execution enables us to tackle robotics' hardest challenges from every angle.
+
+Together, we're building the intelligence, systems, and experiences that will shape the next generation of robotics.
 
 ---
 
 ### Open Roles
 
 **Research**
-Foundation models, reinforcement learning, computer vision. Publish at top-tier venues while shipping production systems.
+Build foundation models for real-world manipulation. Work on reinforcement learning, computer vision, and embodied AI. Publish at top-tier venues (ICML, CoRL, CVPR) while shipping production systems that run in actual factories.
 
 **Engineering**
-Robotics software, control systems, infrastructure. Build the stack that runs in real factories.
+Design the robotics software stack that powers human-level dexterity. Build control systems, infrastructure, and deployment pipelines. Your code runs on factory floors, not just in simulations.
 
-**Product**
-Define what real-world robotics needs. Work directly with manufacturing partners to deploy solutions.
+**Business**
+Define what real-world robotics needs and drive strategic partnerships. Work directly with manufacturing partners like BMW, KDDI, and LG to identify automation opportunities, structure multi-year engagements, and scale deployment across East Asia's industrial ecosystem.
 
-**Operations**
-Scale deployment across East Asia. Manage robot fleets and customer success.
+**Operation**
+Bring robots to production at scale. Manage on-site deployments, robot fleet operations, and customer success programs. Ensure our technology delivers measurable ROI in real factories, stores, and logistics centers.
 
 ---
 
 ### Why RLWRLD
 
 **Real Deployment**
-Your work goes into production, not demos.
+Your work goes into production factories, not just demos. We deploy with Asia's leading manufacturers—you'll see robots running your code on assembly lines within months, not years.
 
 **World-Class Team**
-Collaborate with researchers from KAIST, SNU, and industry veterans from global tech companies.
+Collaborate with researchers who publish at top conferences and engineers who've built products at scale. Work alongside professors from Korea's top universities and operators from BCG, Kurly, and leading tech companies.
 
-**East Asia Manufacturing**
-Be at the center of the world's manufacturing ecosystem.
+**East Asia Manufacturing Hub**
+Be at the center of the world's manufacturing ecosystem. Work with partners across Korea, Japan, and beyond—where the future of industrial automation is being built today.
+
+**Impact at Scale**
+We're not building prototypes. We're deploying humanoids in convenience stores, factories, and logistics centers. Your work will replace manual labor, improve worker safety, and reshape entire industries.
 
 ---
 
-[View Open Positions →] -> Outbound link to job platform: Lever, Greenhouse, 혹은 Notion 등
+[View Open Positions →] -> https://absorbing-gem-9ed.notion.site/Join-RLWRLD-1d56cbdff6f68049a78eda66d0cdd570 (Outbound link to job platform: Lever, Greenhouse, 혹은 Notion 등)
 
 ```
 ├── Careers (/careers)
