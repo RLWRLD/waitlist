@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Explore RLWRLD's research, whitepapers, blog articles, and podcast episodes on Physical AI and robotics.">
+    <title>Lab | RLWRLD</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Reading Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">
+                    <img src="assets/logos/RLWRLD-compact-logo-white.svg" alt="RLWRLD" class="logo-img">
+                </a>
+                <nav class="nav">
+                    <a href="about-us.html" class="nav-link">About</a>
+                    <a href="RLDX-web/index.html" class="nav-link">RLDX</a>
+                    <a href="news.html" class="nav-link">News</a>
+                    <a href="business.html" class="nav-link">Business</a>
+                    <a href="lab.html" class="nav-link">Lab</a>
+                    <a href="careers.html" class="nav-link">Careers</a>
+                    <a href="contact.html" class="nav-link">Contact</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <article class="article">
+            <!-- Hero Section -->
+            <div class="hero">
+                <div class="container">
+                    <h1 class="hero-title">Research & Insights</h1>
+                    <p class="hero-subtitle">RLWRLD의 연구 성과와 기술적 인사이트를 공유하는 허브. 논문, 백서, 블로그, 팟캐스트를 통해 Physical AI와 로보틱스의 최전선을 탐구합니다.</p>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="container">
+                <div class="content">
+                    <!-- Category Filters -->
+                    <div class="category-filters">
+                        <button class="filter-btn active" data-category="all">All</button>
+                        <button class="filter-btn" data-category="research">📚 Research</button>
+                        <button class="filter-btn" data-category="whitepaper">📄 Whitepaper</button>
+                        <button class="filter-btn" data-category="blog">✍️ Blog</button>
+                        <button class="filter-btn" data-category="podcast">🎙️ Podcast</button>
+                    </div>
+
+                    <!-- Special Section: Published Papers -->
+                    <div class="callout" style="margin: 3rem 0;">
+                        <h3 style="color: var(--primary-text); font-size: 1.5rem; margin-bottom: 1rem;">📚 View Published Papers</h3>
+                        <p class="callout-text">Our peer-reviewed publications and research contributions.</p>
+                        <div style="margin-top: 1.5rem;">
+                            <a href="lab/research.html" class="btn">View Research Publications</a>
+                        </div>
+                    </div>
+
+                    <!-- Content Grid -->
+                    <div class="card-grid">
+                        <!-- Example Whitepaper Card -->
+                        <a href="#" class="card" data-category="whitepaper">
+                            <div class="card-image"></div>
+                            <div class="card-content">
+                                <span class="card-category">📄 Whitepaper</span>
+                                <h3 class="card-title">The Future of Robotics Transformation</h3>
+                                <p class="card-date">January 15, 2025</p>
+                                <p class="card-summary">Technical analysis on how foundation models are revolutionizing industrial automation.</p>
+                                <span class="card-link">Read more</span>
+                            </div>
+                        </a>
+
+                        <!-- Example Blog Card -->
+                        <a href="#" class="card" data-category="blog">
+                            <div class="card-image"></div>
+                            <div class="card-content">
+                                <span class="card-category">✍️ Blog</span>
+                                <h3 class="card-title">Why We Build RFM in Asia</h3>
+                                <p class="card-date">March 20, 2025</p>
+                                <p class="card-summary">Insights on why East Asia is the ideal location for developing robot foundation models.</p>
+                                <span class="card-link">Read more</span>
+                            </div>
+                        </a>
+
+                        <!-- Example Podcast Card -->
+                        <a href="#" class="card" data-category="podcast">
+                            <div class="card-image"></div>
+                            <div class="card-content">
+                                <span class="card-category">🎙️ Podcast</span>
+                                <h3 class="card-title">Our Engineers' Thought on RFM</h3>
+                                <p class="card-date">Episode 5 • April 10, 2025</p>
+                                <p class="card-summary">Deep dive into the technical challenges and breakthroughs in robot foundation models.</p>
+                                <span class="card-link">Listen now</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="assets/logos/RLWRLD-compact-logo-white.svg" alt="RLWRLD" class="footer-logo-img">
+                </div>
+                <div style="display: flex; gap: 1.5rem; margin: 1rem 0;">
+                    <a href="https://x.com/RLWRLD_ai" target="_blank" style="color: var(--text-secondary); transition: var(--transition);">X (Twitter)</a>
+                    <a href="https://www.linkedin.com/company/rlwrld/" target="_blank" style="color: var(--text-secondary); transition: var(--transition);">LinkedIn</a>
+                    <a href="https://www.youtube.com/@rlwrld.dexterity" target="_blank" style="color: var(--text-secondary); transition: var(--transition);">YouTube</a>
+                </div>
+                <p class="footer-text">&copy; 2025 RLWRLD Inc. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script>
+        // Simple filter functionality
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Update active state
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+
+                const category = this.dataset.category;
+                const cards = document.querySelectorAll('.card');
+
+                cards.forEach(card => {
+                    if (category === 'all' || card.dataset.category === category) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

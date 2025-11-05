@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Discover how RLWRLD's RLDX foundation model enables 5-finger dexterity for humanoid robots, revolutionizing robotic manipulation with real-world intelligence.">
+    <title>RLDX: A Robotics Foundation Model Where Dexterity Meets Intelligence | RLWRLD</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <!-- Reading Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="logo">
+                    <img src="assets/logos/RLWRLD-compact-logo-white.svg" alt="RLWRLD" class="logo-img">
+                </a>
+                <nav class="nav">
+                    <a href="../about-us.html" class="nav-link">About</a>
+                    <a href="index.html" class="nav-link">RLDX</a>
+                    <a href="../news.html" class="nav-link">News</a>
+                    <a href="../business.html" class="nav-link">Business</a>
+                    <a href="../lab.html" class="nav-link">Lab</a>
+                    <a href="../careers.html" class="nav-link">Careers</a>
+                    <a href="../contact.html" class="nav-link">Contact</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <article class="article">
+            <!-- Hero Section -->
+            <div class="hero">
+                <div class="container">
+                    <h1 class="hero-title"><img src="assets/logos/RLDX-logo.png" alt="RLDX" class="rldx-logo-inline">: Our Robotics Foundation Model Where Dexterity Meets Intelligence</h1>
+                    <p class="hero-subtitle">How <img src="assets/logos/RLDX-logo.png" alt="RLDX" class="rldx-logo-inline"> Powers Real-World Robotic Manipulation</p>
+                    <div class="article-meta">
+                        <span class="meta-item">RLWRLD Research</span>
+                        <span class="meta-divider">•</span>
+                        <span class="meta-item">12 min read</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Article Content -->
+            <div class="container">
+                <div class="content">
+                    <!-- Section 1: Why 5-finger dexterity -->
+                    <section id="dexterity" class="section">
+                        <h2 class="section-title">Why 5-Finger Dexterity?</h2>
+
+                        <p class="paragraph">
+                            What makes the human hand extraordinary is not just its structure, but the way five independent fingers act in concert to achieve unparalleled precision. This structure allows us to grasp, rotate, and manipulate objects of many shapes and sizes. However, most industrial and humanoid robots still use simple grippers such as parallel-jaw, suction, or 3- to 4-finger types. These usually offer only 1 to 7 degrees of freedom (DoF), enough for basic pick-and-place but not for complex manipulation.
+                        </p>
+
+                        <p class="paragraph">
+                            A parallel-jaw gripper can only open and close, and even advanced 3-finger versions are limited to cylindrical or spherical grasps. Crucially, such systems cannot perform <strong>in-hand manipulation</strong> (like rotating or repositioning objects) or <strong>use tools</strong> like screwdrivers, pens, or tweezers. As a result, they fail when tasks require dexterous manipulation skills.
+                        </p>
+
+                        <div class="callout">
+                            <p class="callout-text">
+                                At RLWRLD, we believe dexterity is not about the hand itself. It's about the intelligence behind it. Powered by <strong>RLDX</strong> ("Real-Dex"), our dexterity robotics foundation model, a 5-finger humanoid hand like ALLEX can perform tasks once thought impossible: <strong>opening bottle caps, unpacking boxes, even writing with a pen.</strong>
+                            </p>
+                        </div>
+
+                        <p class="paragraph highlight">
+                            We will unveil more details of <strong>RLDX by Q1 next year.</strong>
+                        </p>
+                    </section>
+
+                    <!-- Section 2: Pouring Milk -->
+                    <section id="lessons" class="section">
+                        <h2 class="section-title">Lessons Learned from "Pouring Milk" with Humanoid Form-Factor</h2>
+
+                        <!-- YouTube Video Embed -->
+                        <div class="video-container">
+                            <iframe
+                                src="https://www.youtube.com/embed/AY7shah5xiw?si=Az5GeiPcrkpdsPZp"
+                                title="Pouring Milk with Humanoid Robot"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowfullscreen>
+                            </iframe>
+                        </div>
+
+                        <h3 class="subsection-title">Multi-modal Sensory Integration and Motion Planning</h3>
+
+                        <p class="paragraph">
+                            At first glance, performing a task such as "pouring milk" with a humanoid robot may appear simple, but in reality it requires the integration of multiple sensory modalities and highly sophisticated planning capabilities. Even an initial action like "unscrewing the bottle cap," which feels effortless to humans, demands a precise combination of visual intelligence, 5-finger dexterity, tactile sensing, and force control from the robot.
+                        </p>
+
+                        <h4 class="step-title">Unscrewing the Bottle Cap</h4>
+
+                        <p class="paragraph">
+                            At this stage, the robot coordinates <strong>fine-grained finger kinematics with real-time force regulation</strong>. Rather than simply applying torque, three fingers dynamically rotate and reposition around the cap through flexion–extension and subtle abduction–adduction motions, creating the stable tri-point contact needed for continuous turning. Torque sensors still play a key role by keeping the applied force within an optimal range to prevent slippage, while tactile feedback ensures secure contact and detects the moment the cap begins to loosen.
+                        </p>
+
+                        <div class="media-container">
+                            <img src="assets/gifs/opening-cap.gif" alt="Robot hand unscrewing a bottle cap" class="media-img media-gif" loading="lazy">
+                            <p class="media-caption">Five-finger manipulation: Dynamic tri-point contact for continuous cap rotation</p>
+                        </div>
+
+                        <h4 class="step-title">Lifting Bottle and Moving Toward Cup</h4>
+
+                        <p class="paragraph">
+                            After opening the cap, the process of lifting the bottle and moving it toward the cup relies heavily on vision and motion planning. <strong>Visual intelligence</strong> enables the robot to recognize the cup's position and precisely align the bottle's opening with it. During this process, the tactile sensor continuously monitors whether the bottle is being held securely and checks for any slippage as the center of gravity shifts.
+                        </p>
+
+                        <h4 class="step-title">Pouring Milk</h4>
+
+                        <p class="paragraph">
+                            Finally, the act of pouring milk involves more than simply tilting the bottle. As the bottle tilts, torque sensing continuously tracks changes in the center of gravity and the angle of inclination, helping to maintain a steady flow of liquid. Meanwhile, tactile sensors detect subtle slippage or vibrations between the bottle's surface and the robot's fingers.
+                        </p>
+
+                        <div class="media-container">
+                            <img src="assets/gifs/pouring-milk.gif" alt="Robot hand pouring milk into a cup" class="media-img media-gif" loading="lazy">
+                            <p class="media-caption">Coordinated torque and tactile sensing for controlled liquid pouring</p>
+                        </div>
+
+                        <div class="insight-box">
+                            <p class="paragraph">
+                                <strong>From unscrewing the bottle cap to pouring milk into the cup, every step requires torque, tactile sensing, vision, and high-level task planning, all working together in close coordination.</strong> Only when these different modalities complement and support one another can the robot achieve manipulation that is as delicate and natural as a human hand. Ultimately, even a seemingly simple task like pouring milk is a highly complex problem that requires the integration of <strong>multi-modal sensing, closed-loop control, and high-level task planning</strong>.
+                            </p>
+                        </div>
+
+                        <p class="paragraph">
+                            Through this process, we gained an important insight: <strong>a planned trajectory is not always executable.</strong> Prediction-based planning alone cannot account for all the irregularities that arise in the real world. These experiences taught us that successful manipulation requires a structure where planning and sensory feedback work in tight coordination, adjusting actions in real time.
+                        </p>
+
+                        <p class="paragraph">
+                            Building on this insight, <strong>RLDX</strong> takes the next step: leveraging <strong>end-to-end learning and VLA (Vision-Language-Action) architectures</strong> to unify perception, reasoning, and control into a single intelligent system.
+                        </p>
+                    </section>
+
+                    <!-- Section 3: RLDX -->
+                    <section id="rldx" class="section">
+                        <h2 class="section-title"><img src="assets/logos/RLDX-logo.png" alt="RLDX" class="rldx-logo-inline"> with VLA (TEMPORARY)</h2>
+
+                        <p class="paragraph">
+                            RLDX represents a fundamental shift in how we approach robotic dexterity. Rather than treating perception, reasoning, and control as separate modules that must be carefully coordinated, RLDX fuses them into a single, end-to-end intelligent system. By integrating <strong class="component-vla">Vision-Language-Action (VLA) architectures</strong> with advanced sensory feedback, RLDX moves beyond traditional three-stage pipelines to enable robots to see, understand, and act in a continuous, tightly coupled loop.
+                        </p>
+
+                        <!-- Interactive RLDX Architecture Diagram -->
+                        <div class="diagram-container">
+                            <div id="rldx-diagram-container"></div>
+                        </div>
+
+                        <h3 class="subsection-title"><span class="component-vla">Unified Intelligence</span>: From Perception to Action</h3>
+
+                        <p class="paragraph">
+                            Traditional robotic systems operate through a sequential pipeline: first they perceive the world through vision, then plan a sequence of actions, and finally execute those actions through low-level controllers. This separation creates fundamental limitations — each stage operates in isolation, making it difficult to adapt when the real world deviates from predictions.
+                        </p>
+
+                        <p class="paragraph">
+                            RLDX breaks down these barriers. By unifying perception, reasoning, and control into a single model, the system can continuously refine its understanding and actions based on real-time feedback. When the robot encounters unexpected resistance while unscrewing a cap, or when an object shifts during manipulation, RLDX doesn't need to restart its planning process. Instead, it seamlessly adjusts its strategy, much like a human would.
+                        </p>
+
+                        <h3 class="subsection-title"><span class="component-multimodal">Multi-Modal Sensing</span>: Understanding Through Multiple Channels</h3>
+
+                        <p class="paragraph">
+                            What sets RLDX apart is its native integration of multiple sensory modalities. The system doesn't just "see" objects through vision — it simultaneously processes visual input, tactile sensing, torque feedback, and language understanding. This multi-modal approach enables RLDX to handle delicate, real-world tasks with the nuance required for true dexterity.
+                        </p>
+
+                        <p class="paragraph">
+                            Consider the act of picking up a fragile object. Vision tells the robot where the object is and its approximate shape. Tactile sensors detect the exact moment of contact and surface texture. Torque feedback monitors grip force in real-time. Language understanding provides context about the object's properties and handling requirements. RLDX processes all of these inputs simultaneously, creating a rich, context-aware understanding that guides every micro-adjustment of the robot's fingers.
+                        </p>
+
+                        <h3 class="subsection-title"><span class="component-latent">Latent Action Layer</span>: Learning the Structure of Manipulation</h3>
+
+                        <p class="paragraph">
+                            At the heart of RLDX is a sophisticated <strong class="component-latent">latent action layer</strong> that encodes the underlying dynamics and structure of manipulation tasks. Rather than learning each task in isolation, RLDX discovers generalizable patterns — the common principles that underlie diverse manipulation skills.
+                        </p>
+
+                        <p class="paragraph">
+                            This latent representation allows RLDX to transfer knowledge across tasks, tools, and even different robotic embodiments. The system learns that "rotating" has common elements whether you're turning a screwdriver, opening a jar, or adjusting a dial. It understands that "grasping" requires similar coordination patterns across different object shapes and sizes.
+                        </p>
+
+                        <p class="paragraph">
+                            By leveraging historical action context, RLDX refines its decisions over time. Each manipulation attempt informs future actions, enabling adaptive, closed-loop control even in highly unstructured environments where perfect prediction is impossible.
+                        </p>
+
+                        <h3 class="subsection-title"><span class="component-vlm">Vision-Language Models</span>: Building on the Shoulders of Giants</h3>
+
+                        <p class="paragraph">
+                            The field of Vision-Language-Action research is rapidly evolving, with much of the current work focusing on model-agnostic augmentation — ways to enhance existing pre-trained models with improved control and reasoning capabilities. RLDX is designed to synergize with this research, acting as a bridge between foundational perception-language intelligence and real-world physical dexterity.
+                        </p>
+
+                        <p class="paragraph">
+                            Built on a powerful <strong class="component-vlm">Vision-Language Model (VLM)</strong> with strong reasoning capabilities, RLDX leverages temporal encoding, token compression, and contextual grounding to plan multi-step actions over time. The system can predict object dynamics, sequence complex manipulation tasks, and make context-aware decisions based on both visual and linguistic understanding.
+                        </p>
+
+                        <p class="paragraph">
+                            This approach allows RLDX to benefit from advances in large-scale pre-training while specializing in the unique challenges of dexterous manipulation. As VLM capabilities improve, RLDX can inherit these improvements while maintaining its core focus on precise, adaptive physical control.
+                        </p>
+
+                        <h3 class="subsection-title"><span class="component-performance">Real-Time Performance</span>: Scalable Architecture</h3>
+
+                        <p class="paragraph">
+                            For dexterity to be practical, it must be fast. RLDX is optimized for <strong class="component-performance">sub-100ms observation-to-action latency</strong>, ensuring that the robot can respond to sensor feedback in near-real-time. Lightweight VLA variants enable deployment on resource-constrained platforms without sacrificing performance.
+                        </p>
+
+                        <p class="paragraph">
+                            The architecture is deliberately designed to be <strong>embodiment-agnostic</strong>. Whether deploying on a 5-finger humanoid hand, a two-arm manipulator, or future robotic platforms, RLDX can rapidly adapt to new hardware configurations. This scalability is crucial for moving from research prototypes to real-world deployment.
+                        </p>
+
+                        <div class="callout">
+                            <p class="callout-text">
+                                <strong>RLDX is not just another foundation model — it's a new paradigm for robotic intelligence.</strong> By unifying perception, reasoning, and control through VLA architectures, and by learning the latent structure of manipulation through multi-modal sensing, RLDX brings us closer to robots that can match human dexterity in the real world.
+                            </p>
+                        </div>
+
+                        <div class="coming-soon">
+                            <p class="coming-soon-text">More details coming Q1 2026</p>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="assets/logos/RLWRLD-compact-logo-white.svg" alt="RLWRLD" class="footer-logo-img">
+                </div>
+                <p class="footer-text">&copy; 2025 RLWRLD. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="interactive-diagram/rldx-diagram-advanced.js"></script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Get in touch with RLWRLD for customer inquiries, partnerships, investor relations, or media/press.">
+    <title>Contact | RLWRLD</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Reading Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">
+                    <img src="assets/logos/RLWRLD-compact-logo-white.svg" alt="RLWRLD" class="logo-img">
+                </a>
+                <nav class="nav">
+                    <a href="about-us.html" class="nav-link">About</a>
+                    <a href="RLDX-web/index.html" class="nav-link">RLDX</a>
+                    <a href="news.html" class="nav-link">News</a>
+                    <a href="business.html" class="nav-link">Business</a>
+                    <a href="lab.html" class="nav-link">Lab</a>
+                    <a href="careers.html" class="nav-link">Careers</a>
+                    <a href="contact.html" class="nav-link">Contact</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <article class="article">
+            <!-- Hero Section -->
+            <div class="hero">
+                <div class="container">
+                    <h1 class="hero-title">Get in Touch</h1>
+                    <p class="hero-subtitle">Ready to transform your operations with real-world intelligence? Contact us.</p>
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="container">
+                <div class="content">
+                    <div class="form-container">
+                        <form action="#" method="POST">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="firstName" class="form-label">First Name</label>
+                                    <input type="text" id="firstName" name="firstName" class="form-input" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastName" class="form-label">Last Name</label>
+                                    <input type="text" id="lastName" name="lastName" class="form-input" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email" class="form-label">Business Email</label>
+                                <input type="email" id="email" name="email" class="form-input" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="phone" class="form-label">Phone Number</label>
+                                <input type="tel" id="phone" name="phone" class="form-input">
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="jobTitle" class="form-label">Job Title</label>
+                                    <input type="text" id="jobTitle" name="jobTitle" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label for="company" class="form-label">Company / Institution</label>
+                                    <input type="text" id="company" name="company" class="form-input">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="inquiryType" class="form-label">Inquiry Type</label>
+                                <select id="inquiryType" name="inquiryType" class="form-select" required>
+                                    <option value="">Select an inquiry type</option>
+                                    <option value="customer">Customer Inquiry</option>
+                                    <option value="partnership">Partnership Inquiry</option>
+                                    <option value="investor">Investor Relations</option>
+                                    <option value="media">Media/Press</option>
+                                    <option value="general">General Inquiry</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="message" class="form-label">Message</label>
+                                <textarea id="message" name="message" class="form-textarea" rows="6" required></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-large" style="width: 100%;">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="assets/logos/RLWRLD-compact-logo-white.svg" alt="RLWRLD" class="footer-logo-img">
+                </div>
+                <div style="display: flex; gap: 1.5rem; margin: 1rem 0;">
+                    <a href="https://x.com/RLWRLD_ai" target="_blank" style="color: var(--text-secondary); transition: var(--transition);">X (Twitter)</a>
+                    <a href="https://www.linkedin.com/company/rlwrld/" target="_blank" style="color: var(--text-secondary); transition: var(--transition);">LinkedIn</a>
+                    <a href="https://www.youtube.com/@rlwrld.dexterity" target="_blank" style="color: var(--text-secondary); transition: var(--transition);">YouTube</a>
+                </div>
+                <p class="footer-text">&copy; 2025 RLWRLD Inc. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
