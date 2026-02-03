@@ -522,9 +522,12 @@
                                         <span class="option-label">Independent / Hobbyist</span>
                                     </label>
                                     <label class="option-item">
-                                        <input type="radio" name="affiliation" value="other">
+                                        <input type="radio" name="affiliation" value="other" id="affiliationOtherRadio">
                                         <span class="option-label">Other</span>
                                     </label>
+                                </div>
+                                <div class="conditional-field" id="affiliationOtherField" style="margin-top: 0.75rem; margin-left: 0; padding-left: 0; border-left: none;">
+                                    <input type="text" name="affiliationOther" class="form-input" placeholder="Please specify (optional)">
                                 </div>
                             </div>
 
@@ -615,9 +618,12 @@
                                         <span class="option-label">Construction</span>
                                     </label>
                                     <label class="option-item">
-                                        <input type="checkbox" name="industry" value="other">
+                                        <input type="checkbox" name="industry" value="other" id="industryOtherCheckbox">
                                         <span class="option-label">Other</span>
                                     </label>
+                                </div>
+                                <div class="conditional-field" id="industryOtherField" style="margin-top: 0.75rem; margin-left: 0; padding-left: 0; border-left: none;">
+                                    <input type="text" name="industryOther" class="form-input" placeholder="Please specify (optional)">
                                 </div>
                             </div>
 
@@ -634,9 +640,12 @@
                                         <span class="option-label">Engineer / Researcher</span>
                                     </label>
                                     <label class="option-item">
-                                        <input type="radio" name="startupRole" value="other">
+                                        <input type="radio" name="startupRole" value="other" id="startupRoleOtherRadio">
                                         <span class="option-label">Other</span>
                                     </label>
+                                </div>
+                                <div class="conditional-field" id="startupRoleOtherField" style="margin-top: 0.75rem; margin-left: 0; padding-left: 0; border-left: none;">
+                                    <input type="text" name="startupRoleOther" class="form-input" placeholder="Please specify (optional)">
                                 </div>
                             </div>
 
@@ -732,9 +741,12 @@
                                         <span class="option-label">Dexterous Hand System</span>
                                     </label>
                                     <label class="option-item">
-                                        <input type="checkbox" name="robotType" value="other">
+                                        <input type="checkbox" name="robotType" value="other" id="robotTypeOtherCheckbox">
                                         <span class="option-label">Other</span>
                                     </label>
+                                </div>
+                                <div class="conditional-field" id="robotTypeOtherField" style="margin-top: 0.75rem; margin-left: 0; padding-left: 0; border-left: none;">
+                                    <input type="text" name="robotTypeOther" class="form-input" placeholder="Please specify (optional)">
                                 </div>
                             </div>
 
@@ -787,9 +799,12 @@
                                         <span class="option-label">Custom-built</span>
                                     </label>
                                     <label class="option-item">
-                                        <input type="checkbox" name="robotBrand" value="other">
+                                        <input type="checkbox" name="robotBrand" value="other" id="robotBrandOtherCheckbox">
                                         <span class="option-label">Other</span>
                                     </label>
+                                </div>
+                                <div class="conditional-field" id="robotBrandOtherField" style="margin-top: 0.75rem; margin-left: 0; padding-left: 0; border-left: none;">
+                                    <input type="text" name="robotBrandOther" class="form-input" placeholder="Please specify (optional)">
                                 </div>
                             </div>
 
@@ -915,30 +930,44 @@
                                         <span class="option-label">Writing / drawing</span>
                                     </label>
                                     <label class="option-item">
-                                        <input type="checkbox" name="applications" value="other">
+                                        <input type="checkbox" name="applications" value="other" id="applicationsOtherCheckbox">
                                         <span class="option-label">Other</span>
                                     </label>
+                                </div>
+                                <div class="conditional-field" id="applicationsOtherField" style="margin-top: 0.75rem; margin-left: 0; padding-left: 0; border-left: none;">
+                                    <input type="text" name="applicationsOther" class="form-input" placeholder="Please specify (optional)">
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label class="form-label">Would you share your experience publicly? *</label>
-                                <div class="option-group">
+                                <div class="option-group" id="shareWillingGroup">
                                     <label class="option-item">
-                                        <input type="radio" name="shareExperience" value="create_content" required>
-                                        <span class="option-label">Yes, I'd create content (video/blog/social)</span>
+                                        <input type="radio" name="shareWilling" value="yes" required id="shareWillingYes">
+                                        <span class="option-label">Yes</span>
                                     </label>
                                     <label class="option-item">
-                                        <input type="radio" name="shareExperience" value="testimonial">
-                                        <span class="option-label">Yes, I'd give a testimonial at RLDX launching event</span>
-                                    </label>
-                                    <label class="option-item">
-                                        <input type="radio" name="shareExperience" value="maybe">
+                                        <input type="radio" name="shareWilling" value="maybe">
                                         <span class="option-label">Maybe, depends on results</span>
                                     </label>
                                     <label class="option-item">
-                                        <input type="radio" name="shareExperience" value="private">
+                                        <input type="radio" name="shareWilling" value="no">
                                         <span class="option-label">No, prefer private</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Conditional: Share Type (shown when Yes) -->
+                            <div class="form-group conditional-field" id="shareTypeField">
+                                <label class="form-label">How would you like to share? <span style="color: var(--text-light); font-weight: normal;">(select all that apply)</span></label>
+                                <div class="option-grid">
+                                    <label class="option-item">
+                                        <input type="checkbox" name="shareType" value="content">
+                                        <span class="option-label">Create content (video/blog/social)</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="shareType" value="testimonial">
+                                        <span class="option-label">Give a testimonial at RLDX launching event</span>
                                     </label>
                                 </div>
                             </div>
@@ -1001,9 +1030,12 @@
                                         <span class="option-label">RLWRLD website</span>
                                     </label>
                                     <label class="option-item">
-                                        <input type="radio" name="referralSource" value="other">
+                                        <input type="radio" name="referralSource" value="other" id="referralSourceOtherRadio">
                                         <span class="option-label">Other</span>
                                     </label>
+                                </div>
+                                <div class="conditional-field" id="referralSourceOtherField" style="margin-top: 0.75rem; margin-left: 0; padding-left: 0; border-left: none;">
+                                    <input type="text" name="referralSourceOther" class="form-input" placeholder="Please specify (optional)">
                                 </div>
                             </div>
                         </div>
@@ -1085,15 +1117,43 @@
                 });
             });
 
-            // Handle communities "Other" checkbox
-            const communitiesOtherCheckbox = document.getElementById('communitiesOtherCheckbox');
-            const communitiesOtherField = document.getElementById('communitiesOtherField');
-            communitiesOtherCheckbox.addEventListener('change', function() {
-                if (this.checked) {
-                    communitiesOtherField.classList.add('visible');
-                } else {
-                    communitiesOtherField.classList.remove('visible');
+            // Handle all "Other" option conditional fields
+            const otherFields = [
+                { checkbox: 'communitiesOtherCheckbox', field: 'communitiesOtherField', type: 'checkbox' },
+                { checkbox: 'industryOtherCheckbox', field: 'industryOtherField', type: 'checkbox' },
+                { checkbox: 'robotTypeOtherCheckbox', field: 'robotTypeOtherField', type: 'checkbox' },
+                { checkbox: 'robotBrandOtherCheckbox', field: 'robotBrandOtherField', type: 'checkbox' },
+                { checkbox: 'applicationsOtherCheckbox', field: 'applicationsOtherField', type: 'checkbox' },
+                { checkbox: 'affiliationOtherRadio', field: 'affiliationOtherField', type: 'radio', name: 'affiliation' },
+                { checkbox: 'startupRoleOtherRadio', field: 'startupRoleOtherField', type: 'radio', name: 'startupRole' },
+                { checkbox: 'referralSourceOtherRadio', field: 'referralSourceOtherField', type: 'radio', name: 'referralSource' }
+            ];
+
+            otherFields.forEach(config => {
+                const input = document.getElementById(config.checkbox);
+                const field = document.getElementById(config.field);
+                if (input && field) {
+                    if (config.type === 'checkbox') {
+                        input.addEventListener('change', function() {
+                            field.classList.toggle('visible', this.checked);
+                        });
+                    } else {
+                        // For radio buttons, listen to all radios in the group
+                        document.querySelectorAll(`input[name="${config.name}"]`).forEach(radio => {
+                            radio.addEventListener('change', function() {
+                                field.classList.toggle('visible', this.value === 'other');
+                            });
+                        });
+                    }
                 }
+            });
+
+            // Handle share willing conditional logic (show share type when Yes)
+            const shareTypeField = document.getElementById('shareTypeField');
+            document.querySelectorAll('input[name="shareWilling"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    shareTypeField.classList.toggle('visible', this.value === 'yes');
+                });
             });
 
             // Handle robot access conditional logic
