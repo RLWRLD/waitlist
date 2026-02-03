@@ -495,80 +495,146 @@
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label">What best describes you? *</label>
-                                <div class="option-group" id="roleGroup">
+                                <label class="form-label">What type of organization are you from? *</label>
+                                <div class="option-group" id="affiliationGroup">
                                     <label class="option-item">
-                                        <input type="radio" name="role" value="researcher" required>
-                                        <span class="option-label">Robotics Researcher / Engineer</span>
+                                        <input type="radio" name="affiliation" value="academic" required>
+                                        <span class="option-label">Academic (University / Research Institute)</span>
                                     </label>
                                     <label class="option-item">
-                                        <input type="radio" name="role" value="founder">
-                                        <span class="option-label">Physical AI Startup Founder</span>
+                                        <input type="radio" name="affiliation" value="industry">
+                                        <span class="option-label">Industry / Corporate</span>
                                     </label>
                                     <label class="option-item">
-                                        <input type="radio" name="role" value="investor">
+                                        <input type="radio" name="affiliation" value="startup">
+                                        <span class="option-label">Startup</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="radio" name="affiliation" value="investor">
                                         <span class="option-label">Investor / VC</span>
                                     </label>
                                     <label class="option-item">
-                                        <input type="radio" name="role" value="media">
-                                        <span class="option-label">Media / Journalist / Content Creator</span>
+                                        <input type="radio" name="affiliation" value="media">
+                                        <span class="option-label">Media / Content Creator</span>
                                     </label>
                                     <label class="option-item">
-                                        <input type="radio" name="role" value="corporate">
-                                        <span class="option-label">Corporate (exploring deployment)</span>
+                                        <input type="radio" name="affiliation" value="independent">
+                                        <span class="option-label">Independent / Hobbyist</span>
                                     </label>
                                     <label class="option-item">
-                                        <input type="radio" name="role" value="student">
-                                        <span class="option-label">Student / Academic</span>
-                                    </label>
-                                    <label class="option-item">
-                                        <input type="radio" name="role" value="hobbyist">
-                                        <span class="option-label">Hobbyist / Maker</span>
-                                    </label>
-                                    <label class="option-item">
-                                        <input type="radio" name="role" value="other">
+                                        <input type="radio" name="affiliation" value="other">
                                         <span class="option-label">Other</span>
                                     </label>
                                 </div>
                             </div>
 
-                            <div class="form-group">
-                                <label class="form-label">Organization Type *</label>
+                            <!-- Conditional: Academic Role -->
+                            <div class="form-group conditional-field" id="academicRoleField">
+                                <label class="form-label">What is your role? *</label>
                                 <div class="option-group">
                                     <label class="option-item">
-                                        <input type="radio" name="orgType" value="university" required>
-                                        <span class="option-label">University / Research Institution</span>
+                                        <input type="radio" name="academicRole" value="professor">
+                                        <span class="option-label">Professor / PI</span>
                                     </label>
                                     <label class="option-item">
-                                        <input type="radio" name="orgType" value="robot_mfr">
-                                        <span class="option-label">Robot Manufacturer</span>
+                                        <input type="radio" name="academicRole" value="postdoc">
+                                        <span class="option-label">PhD / Postdoc / Researcher</span>
                                     </label>
                                     <label class="option-item">
-                                        <input type="radio" name="orgType" value="ai_sw">
-                                        <span class="option-label">AI Software Company</span>
+                                        <input type="radio" name="academicRole" value="student">
+                                        <span class="option-label">Student (Undergrad / Masters)</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Conditional: Industry Role -->
+                            <div class="form-group conditional-field" id="industryRoleField">
+                                <label class="form-label">What is your role? *</label>
+                                <div class="option-group">
+                                    <label class="option-item">
+                                        <input type="radio" name="industryRole" value="rd">
+                                        <span class="option-label">R&D / Research</span>
                                     </label>
                                     <label class="option-item">
-                                        <input type="radio" name="orgType" value="integrator">
-                                        <span class="option-label">System Integrator / Solution Provider</span>
+                                        <input type="radio" name="industryRole" value="engineering">
+                                        <span class="option-label">Engineering / Product</span>
                                     </label>
                                     <label class="option-item">
-                                        <input type="radio" name="orgType" value="end_user">
-                                        <span class="option-label">End-User (Factory, Warehouse, etc.)</span>
+                                        <input type="radio" name="industryRole" value="operations">
+                                        <span class="option-label">Operations / Deployment</span>
                                     </label>
                                     <label class="option-item">
-                                        <input type="radio" name="orgType" value="startup">
-                                        <span class="option-label">Startup</span>
+                                        <input type="radio" name="industryRole" value="business">
+                                        <span class="option-label">Business / Strategy</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Conditional: Industry Type -->
+                            <div class="form-group conditional-field" id="industryField">
+                                <label class="form-label">Which industry? <span style="color: var(--text-light); font-weight: normal;">(select all that apply)</span></label>
+                                <div class="option-grid">
+                                    <label class="option-item">
+                                        <input type="checkbox" name="industry" value="manufacturing">
+                                        <span class="option-label">Manufacturing</span>
                                     </label>
                                     <label class="option-item">
-                                        <input type="radio" name="orgType" value="vc">
-                                        <span class="option-label">VC / Investment Firm</span>
+                                        <input type="checkbox" name="industry" value="logistics">
+                                        <span class="option-label">Logistics / Warehousing</span>
                                     </label>
                                     <label class="option-item">
-                                        <input type="radio" name="orgType" value="media_press">
-                                        <span class="option-label">Media / Press</span>
+                                        <input type="checkbox" name="industry" value="food">
+                                        <span class="option-label">Food & Beverage</span>
                                     </label>
                                     <label class="option-item">
-                                        <input type="radio" name="orgType" value="other">
+                                        <input type="checkbox" name="industry" value="healthcare">
+                                        <span class="option-label">Healthcare / Medical</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="industry" value="retail">
+                                        <span class="option-label">Retail / Service</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="industry" value="automotive">
+                                        <span class="option-label">Automotive</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="industry" value="electronics">
+                                        <span class="option-label">Electronics</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="industry" value="aerospace">
+                                        <span class="option-label">Aerospace</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="industry" value="agriculture">
+                                        <span class="option-label">Agriculture</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="industry" value="construction">
+                                        <span class="option-label">Construction</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="industry" value="other">
+                                        <span class="option-label">Other</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Conditional: Startup Role -->
+                            <div class="form-group conditional-field" id="startupRoleField">
+                                <label class="form-label">What is your role? *</label>
+                                <div class="option-group">
+                                    <label class="option-item">
+                                        <input type="radio" name="startupRole" value="founder">
+                                        <span class="option-label">Founder / C-level</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="radio" name="startupRole" value="engineer">
+                                        <span class="option-label">Engineer / Researcher</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="radio" name="startupRole" value="other">
                                         <span class="option-label">Other</span>
                                     </label>
                                 </div>
@@ -764,20 +830,28 @@
                                 <label class="form-label">What do you want to do with RLDX? * <span style="color: var(--text-light); font-weight: normal;">(select all that apply)</span></label>
                                 <div class="option-grid">
                                     <label class="option-item">
-                                        <input type="checkbox" name="useCase" value="evaluate" required>
-                                        <span class="option-label">Evaluate / benchmark</span>
+                                        <input type="checkbox" name="useCase" value="benchmark" required>
+                                        <span class="option-label">Benchmark against other models</span>
                                     </label>
                                     <label class="option-item">
                                         <input type="checkbox" name="useCase" value="finetune">
                                         <span class="option-label">Fine-tune for my tasks</span>
                                     </label>
                                     <label class="option-item">
+                                        <input type="checkbox" name="useCase" value="integrate">
+                                        <span class="option-label">Integrate into my robot product</span>
+                                    </label>
+                                    <label class="option-item">
                                         <input type="checkbox" name="useCase" value="deploy">
                                         <span class="option-label">Deploy in production / pilot</span>
                                     </label>
                                     <label class="option-item">
-                                        <input type="checkbox" name="useCase" value="research">
-                                        <span class="option-label">Research / publish papers</span>
+                                        <input type="checkbox" name="useCase" value="prototype">
+                                        <span class="option-label">Build a demo or prototype</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="useCase" value="hobby">
+                                        <span class="option-label">Personal project / hobby</span>
                                     </label>
                                     <label class="option-item">
                                         <input type="checkbox" name="useCase" value="explore">
@@ -787,35 +861,51 @@
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label">What applications are you exploring? * <span style="color: var(--text-light); font-weight: normal;">(select all that apply)</span></label>
+                                <label class="form-label">What tasks are you interested in? * <span style="color: var(--text-light); font-weight: normal;">(select all that apply)</span></label>
                                 <div class="option-grid">
                                     <label class="option-item">
-                                        <input type="checkbox" name="applications" value="dexterous" required>
-                                        <span class="option-label">Dexterous manipulation</span>
-                                    </label>
-                                    <label class="option-item">
-                                        <input type="checkbox" name="applications" value="pick_place">
-                                        <span class="option-label">Pick & place</span>
+                                        <input type="checkbox" name="applications" value="bin_picking" required>
+                                        <span class="option-label">Bin picking / sorting</span>
                                     </label>
                                     <label class="option-item">
                                         <input type="checkbox" name="applications" value="assembly">
-                                        <span class="option-label">Assembly</span>
+                                        <span class="option-label">Assembly / insertion</span>
                                     </label>
                                     <label class="option-item">
-                                        <input type="checkbox" name="applications" value="logistics">
-                                        <span class="option-label">Logistics / packaging</span>
-                                    </label>
-                                    <label class="option-item">
-                                        <input type="checkbox" name="applications" value="food">
-                                        <span class="option-label">Food handling</span>
+                                        <input type="checkbox" name="applications" value="packaging">
+                                        <span class="option-label">Packaging / palletizing</span>
                                     </label>
                                     <label class="option-item">
                                         <input type="checkbox" name="applications" value="tool_use">
-                                        <span class="option-label">Tool use</span>
+                                        <span class="option-label">Tool use (screwdriver, pen, etc.)</span>
                                     </label>
                                     <label class="option-item">
-                                        <input type="checkbox" name="applications" value="benchmarking">
-                                        <span class="option-label">Research & benchmarking</span>
+                                        <input type="checkbox" name="applications" value="handover">
+                                        <span class="option-label">Object handover (human-robot)</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="applications" value="cable">
+                                        <span class="option-label">Cable / wire manipulation</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="applications" value="cloth">
+                                        <span class="option-label">Cloth / fabric handling</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="applications" value="food">
+                                        <span class="option-label">Food handling / cooking</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="applications" value="cleaning">
+                                        <span class="option-label">Cleaning / housework</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="applications" value="door">
+                                        <span class="option-label">Door / drawer opening</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="applications" value="writing">
+                                        <span class="option-label">Writing / drawing</span>
                                     </label>
                                     <label class="option-item">
                                         <input type="checkbox" name="applications" value="other">
@@ -862,15 +952,15 @@
                                 <div class="option-group">
                                     <label class="option-item">
                                         <input type="radio" name="eventAttendance" value="us_inperson" required>
-                                        <span class="option-label">Yes, in person (US)</span>
+                                        <span class="option-label">Yes, in person (US) — May 2026</span>
                                     </label>
                                     <label class="option-item">
                                         <input type="radio" name="eventAttendance" value="kr_inperson">
-                                        <span class="option-label">Yes, in person (Korea)</span>
+                                        <span class="option-label">Yes, in person (Korea) — May 2026</span>
                                     </label>
                                     <label class="option-item">
                                         <input type="radio" name="eventAttendance" value="jp_inperson">
-                                        <span class="option-label">Yes, in person (Japan)</span>
+                                        <span class="option-label">Yes, in person (Japan) — June 2026</span>
                                     </label>
                                     <label class="option-item">
                                         <input type="radio" name="eventAttendance" value="virtual">
@@ -964,6 +1054,32 @@
             const robotAccessGroup = document.querySelectorAll('input[name="robotAccess"]');
             const robotTypeField = document.getElementById('robotTypeField');
             const robotBrandField = document.getElementById('robotBrandField');
+            const affiliationGroup = document.querySelectorAll('input[name="affiliation"]');
+            const academicRoleField = document.getElementById('academicRoleField');
+            const industryRoleField = document.getElementById('industryRoleField');
+            const industryField = document.getElementById('industryField');
+            const startupRoleField = document.getElementById('startupRoleField');
+
+            // Handle affiliation conditional logic
+            affiliationGroup.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    // Hide all conditional fields first
+                    academicRoleField.classList.remove('visible');
+                    industryRoleField.classList.remove('visible');
+                    industryField.classList.remove('visible');
+                    startupRoleField.classList.remove('visible');
+
+                    // Show relevant fields based on affiliation
+                    if (this.value === 'academic') {
+                        academicRoleField.classList.add('visible');
+                    } else if (this.value === 'industry') {
+                        industryRoleField.classList.add('visible');
+                        industryField.classList.add('visible');
+                    } else if (this.value === 'startup') {
+                        startupRoleField.classList.add('visible');
+                    }
+                });
+            });
 
             // Handle robot access conditional logic
             robotAccessGroup.forEach(radio => {
