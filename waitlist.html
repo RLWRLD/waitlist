@@ -78,6 +78,8 @@
         .form-label {
             font-size: 0.85rem;
             margin-bottom: 0.4rem;
+            color: var(--primary-color);
+            font-weight: 500;
         }
 
         .form-input, .form-select {
@@ -180,6 +182,9 @@
         .conditional-field {
             display: none;
             animation: fadeIn 0.2s ease;
+            margin-left: 1rem;
+            padding-left: 1rem;
+            border-left: 2px solid var(--primary-color);
         }
 
         .conditional-field.visible {
@@ -424,14 +429,10 @@
 
             <!-- Model Info -->
             <div class="container">
-                <div class="model-cards">
+                <div class="model-cards" style="grid-template-columns: 1fr; max-width: 500px;">
                     <div class="model-card">
-                        <h4>RLDX-S0 — Specialized Dexterity</h4>
-                        <p>High-frequency control for precision manipulation. Compact (&lt;1B params), fast, and purpose-built for tasks that grippers can't handle.</p>
-                    </div>
-                    <div class="model-card">
-                        <h4>RLDX-G0 — Generalist VLA</h4>
-                        <p>Multi-task foundation model (8B params) with VLM knowledge inheritance. From logistics picking to complex bimanual coordination.</p>
+                        <h4>RLDX — Dexterity Foundation Model</h4>
+                        <p>Vision-Language-Action model for real-world dexterous manipulation. Torque-aware, tactile-driven, and trained on industrial dexterity data.</p>
                     </div>
                 </div>
             </div>
@@ -478,6 +479,11 @@
                                     <option value="SG">Singapore</option>
                                     <option value="other">Other</option>
                                 </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="socialProfile" class="form-label">X or LinkedIn Profile <span style="color: var(--text-light); font-weight: normal;">(optional)</span></label>
+                                <input type="url" id="socialProfile" name="socialProfile" class="form-input" placeholder="https://x.com/username or https://linkedin.com/in/username">
                             </div>
                         </div>
 
@@ -699,9 +705,9 @@
                                         <input type="checkbox" name="robotBrand" value="lerobot_so100">
                                         <span class="option-label">LeRobot SO-100</span>
                                     </label>
-                                    <label class="option-item" style="border-color: var(--primary-color);">
+                                    <label class="option-item">
                                         <input type="checkbox" name="robotBrand" value="rlwrld">
-                                        <span class="option-label" style="color: var(--primary-color);">RLWRLD ALLEX / OpenArm</span>
+                                        <span class="option-label">RLWRLD ALLEX / OpenArm</span>
                                     </label>
                                     <label class="option-item">
                                         <input type="checkbox" name="robotBrand" value="custom">
@@ -714,35 +720,34 @@
                                 </div>
                             </div>
 
-                            <!-- Conditional: GPU/Simulation Hardware -->
-                            <div class="form-group conditional-field" id="gpuField">
-                                <label class="form-label">Do you have access to simulation hardware? <span style="color: var(--text-light); font-weight: normal;">(for Isaac Sim testing)</span></label>
+                            <div class="form-group">
+                                <label class="form-label">Do you have access to a simulation environment? *</label>
                                 <div class="option-group">
                                     <label class="option-item">
-                                        <input type="radio" name="gpuAccess" value="rtx4080_plus">
+                                        <input type="radio" name="simAccess" value="rtx4080_plus" required>
                                         <div class="option-content">
                                             <div class="option-label">Yes, RTX 4080 or higher (16GB+ VRAM)</div>
                                             <div class="option-description">Recommended for Isaac Lab Arena evaluation</div>
                                         </div>
                                     </label>
                                     <label class="option-item">
-                                        <input type="radio" name="gpuAccess" value="rtx4070">
+                                        <input type="radio" name="simAccess" value="rtx4070">
                                         <div class="option-content">
                                             <div class="option-label">Yes, RTX 4070 or similar (12-16GB VRAM)</div>
                                             <div class="option-description">Basic simulation capable</div>
                                         </div>
                                     </label>
                                     <label class="option-item">
-                                        <input type="radio" name="gpuAccess" value="lower">
+                                        <input type="radio" name="simAccess" value="lower">
                                         <span class="option-label">Yes, but lower-end GPU</span>
                                     </label>
                                     <label class="option-item">
-                                        <input type="radio" name="gpuAccess" value="cloud">
-                                        <span class="option-label">No GPU / Cloud only</span>
+                                        <input type="radio" name="simAccess" value="cloud">
+                                        <span class="option-label">No local GPU / Cloud only</span>
                                     </label>
                                     <label class="option-item">
-                                        <input type="radio" name="gpuAccess" value="not_sure">
-                                        <span class="option-label">Not sure</span>
+                                        <input type="radio" name="simAccess" value="no">
+                                        <span class="option-label">No access to simulation</span>
                                     </label>
                                 </div>
                             </div>
@@ -753,30 +758,6 @@
                             <div class="section-header">
                                 <div class="section-number">Section 4 of 5</div>
                                 <h3 class="section-title">Interest in RLDX</h3>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label">Which RLDX model interests you? *</label>
-                                <div class="option-group">
-                                    <label class="option-item">
-                                        <input type="checkbox" name="modelInterest" value="s0" required>
-                                        <div class="option-content">
-                                            <div class="option-label">RLDX-S0 — Specialized Dexterity</div>
-                                            <div class="option-description">High-freq, &lt;1B params, precision manipulation</div>
-                                        </div>
-                                    </label>
-                                    <label class="option-item">
-                                        <input type="checkbox" name="modelInterest" value="g0">
-                                        <div class="option-content">
-                                            <div class="option-label">RLDX-G0 — Generalist VLA</div>
-                                            <div class="option-description">Multi-task, 8B params, broad capabilities</div>
-                                        </div>
-                                    </label>
-                                    <label class="option-item">
-                                        <input type="checkbox" name="modelInterest" value="both">
-                                        <span class="option-label">Both / Not sure yet</span>
-                                    </label>
-                                </div>
                             </div>
 
                             <div class="form-group">
@@ -797,14 +778,6 @@
                                     <label class="option-item">
                                         <input type="checkbox" name="useCase" value="research">
                                         <span class="option-label">Research / publish papers</span>
-                                    </label>
-                                    <label class="option-item">
-                                        <input type="checkbox" name="useCase" value="content">
-                                        <span class="option-label">Create content / review</span>
-                                    </label>
-                                    <label class="option-item">
-                                        <input type="checkbox" name="useCase" value="investment">
-                                        <span class="option-label">Investment evaluation</span>
                                     </label>
                                     <label class="option-item">
                                         <input type="checkbox" name="useCase" value="explore">
@@ -991,21 +964,18 @@
             const robotAccessGroup = document.querySelectorAll('input[name="robotAccess"]');
             const robotTypeField = document.getElementById('robotTypeField');
             const robotBrandField = document.getElementById('robotBrandField');
-            const gpuField = document.getElementById('gpuField');
 
             // Handle robot access conditional logic
             robotAccessGroup.forEach(radio => {
                 radio.addEventListener('change', function() {
-                    const hasRobot = this.value === 'own' || this.value === 'lab';
+                    const hasRobot = this.value === 'own' || this.value === 'lab' || this.value === 'planning';
 
                     if (hasRobot) {
                         robotTypeField.classList.add('visible');
                         robotBrandField.classList.add('visible');
-                        gpuField.classList.add('visible');
                     } else {
                         robotTypeField.classList.remove('visible');
                         robotBrandField.classList.remove('visible');
-                        gpuField.classList.remove('visible');
                     }
                 });
             });
