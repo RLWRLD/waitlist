@@ -667,6 +667,13 @@
                                         <input type="checkbox" name="communities" value="none">
                                         <span class="option-label">None</span>
                                     </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="communities" value="other" id="communitiesOtherCheckbox">
+                                        <span class="option-label">Other</span>
+                                    </label>
+                                </div>
+                                <div class="conditional-field" id="communitiesOtherField" style="margin-top: 0.75rem; margin-left: 0; padding-left: 0; border-left: none;">
+                                    <input type="text" name="communitiesOther" class="form-input" placeholder="Please specify">
                                 </div>
                             </div>
                         </div>
@@ -919,14 +926,11 @@
                                 <div class="option-group">
                                     <label class="option-item">
                                         <input type="radio" name="shareExperience" value="create_content" required>
-                                        <div class="option-content">
-                                            <div class="option-label">Yes, I'd create content (video/blog/social)</div>
-                                            <div class="option-description">Priority access for content creators</div>
-                                        </div>
+                                        <span class="option-label">Yes, I'd create content (video/blog/social)</span>
                                     </label>
                                     <label class="option-item">
                                         <input type="radio" name="shareExperience" value="testimonial">
-                                        <span class="option-label">Yes, I'd give a testimonial</span>
+                                        <span class="option-label">Yes, I'd give a testimonial at RLDX launching event</span>
                                     </label>
                                     <label class="option-item">
                                         <input type="radio" name="shareExperience" value="maybe">
@@ -1079,6 +1083,17 @@
                         startupRoleField.classList.add('visible');
                     }
                 });
+            });
+
+            // Handle communities "Other" checkbox
+            const communitiesOtherCheckbox = document.getElementById('communitiesOtherCheckbox');
+            const communitiesOtherField = document.getElementById('communitiesOtherField');
+            communitiesOtherCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    communitiesOtherField.classList.add('visible');
+                } else {
+                    communitiesOtherField.classList.remove('visible');
+                }
             });
 
             // Handle robot access conditional logic
