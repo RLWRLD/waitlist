@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sign up for RLDX Early Access - Vision-Language-Action models for real-world dexterous manipulation.">
+    <title>RLDX Early Access | RLWRLD</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Compact Waitlist Form Styles */
+        .waitlist-hero {
+            padding: 2rem 0 1rem;
+            text-align: center;
+        }
+
+        .waitlist-hero .hero-title {
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            margin-bottom: 0.5rem;
+        }
+
+        .waitlist-hero .hero-subtitle {
+            max-width: 600px;
+            margin: 0 auto 0.75rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .launch-badge {
+            display: inline-block;
+            background: rgba(80, 234, 206, 0.1);
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-section {
+            margin-bottom: 1.25rem;
+            padding-bottom: 1.25rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .form-section:last-of-type {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .section-header {
+            margin-bottom: 0.75rem;
+        }
+
+        .section-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0;
+        }
+
+        .section-number {
+            font-size: 0.7rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .form-group {
+            margin-bottom: 0.75rem;
+        }
+
+        .form-label {
+            font-size: 0.85rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .form-input, .form-select {
+            padding: 0.5rem 0.75rem;
+            font-size: 0.85rem;
+        }
+
+        /* Compact Radio & Checkbox */
+        .option-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 0.6rem;
+            background: var(--background-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .option-item:hover {
+            border-color: var(--primary-color);
+            background: rgba(80, 234, 206, 0.05);
+        }
+
+        .option-item.selected {
+            border-color: var(--primary-color);
+            background: rgba(80, 234, 206, 0.1);
+        }
+
+        .option-item input[type="radio"],
+        .option-item input[type="checkbox"] {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            background: transparent;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: var(--transition);
+        }
+
+        .option-item input[type="checkbox"] {
+            border-radius: 3px;
+        }
+
+        .option-item input[type="radio"]:checked,
+        .option-item input[type="checkbox"]:checked {
+            border-color: var(--primary-color);
+            background: var(--primary-color);
+        }
+
+        .option-item input[type="radio"]:checked::after {
+            content: '';
+            display: block;
+            width: 6px;
+            height: 6px;
+            background: var(--background);
+            border-radius: 50%;
+            margin: 3px;
+        }
+
+        .option-item input[type="checkbox"]:checked::after {
+            content: '✓';
+            display: block;
+            color: var(--background);
+            font-size: 11px;
+            font-weight: bold;
+            text-align: center;
+            line-height: 12px;
+        }
+
+        .option-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .option-label {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            line-height: 1.3;
+        }
+
+        .option-description {
+            font-size: 0.7rem;
+            color: var(--text-light);
+            line-height: 1.3;
+        }
+
+        /* Conditional Fields */
+        .conditional-field {
+            display: none;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .conditional-field.visible {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Compact Grid */
+        .option-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 0.35rem;
+        }
+
+        .option-grid .option-item {
+            padding: 0.35rem 0.5rem;
+        }
+
+        .option-grid .option-label {
+            font-size: 0.75rem;
+        }
+
+        /* Model Cards - Compact */
+        .model-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .model-card {
+            padding: 0.6rem 0.75rem;
+            background: var(--background-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+        }
+
+        .model-card h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.25rem;
+            font-size: 0.8rem;
+        }
+
+        .model-card p {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        /* Submit Section */
+        .submit-section {
+            text-align: center;
+            padding-top: 1rem;
+        }
+
+        .submit-note {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            margin-top: 0.5rem;
+        }
+
+        .btn-large {
+            padding: 0.6rem 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        /* Success Message */
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        .success-message.visible {
+            display: block;
+        }
+
+        .success-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(80, 234, 206, 0.1);
+            border: 2px solid var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .success-message h2 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-size: 1.25rem;
+        }
+
+        /* Form Container - Compact */
+        .waitlist-form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--background-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1.25rem;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 640px) {
+            .waitlist-hero {
+                padding: 1.5rem 0 0.75rem;
+            }
+
+            .waitlist-hero .hero-title {
+                font-size: 1.35rem;
+            }
+
+            .waitlist-hero .hero-subtitle {
+                font-size: 0.8rem;
+                padding: 0 0.5rem;
+            }
+
+            .waitlist-form-container {
+                padding: 1rem;
+                margin: 0 0.5rem;
+                border-radius: 8px;
+            }
+
+            .form-section {
+                margin-bottom: 1rem;
+                padding-bottom: 1rem;
+            }
+
+            .section-title {
+                font-size: 0.9rem;
+            }
+
+            .form-label {
+                font-size: 0.8rem;
+            }
+
+            .option-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .option-grid .option-label {
+                font-size: 0.7rem;
+            }
+
+            .model-cards {
+                grid-template-columns: 1fr;
+                gap: 0.4rem;
+            }
+
+            .model-card {
+                padding: 0.5rem 0.6rem;
+            }
+
+            .model-card h4 {
+                font-size: 0.75rem;
+            }
+
+            .model-card p {
+                font-size: 0.65rem;
+            }
+
+            .option-item {
+                padding: 0.35rem 0.5rem;
+            }
+
+            .option-label {
+                font-size: 0.75rem;
+            }
+
+            .option-description {
+                font-size: 0.65rem;
+            }
+
+            .btn-large {
+                width: 100%;
+                padding: 0.6rem 1rem;
+            }
+        }
+
+        /* Extra small screens */
+        @media (max-width: 380px) {
+            .option-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .waitlist-form-container {
+                margin: 0 0.25rem;
+                padding: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Reading Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">
+                    <img src="assets/logos/RLWRLD-compact-logo-white.svg" alt="RLWRLD" class="logo-img">
+                </a>
+                <nav class="nav">
+                    <a href="company.html" class="nav-link">Company</a>
+                    <a href="RLDX-web/index.html" class="nav-link">RLDX</a>
+                    <a href="news.html" class="nav-link">News</a>
+                    <a href="business.html" class="nav-link">Business</a>
+                    <a href="research.html" class="nav-link">Research</a>
+                    <a href="careers.html" class="nav-link">Careers</a>
+                    <a href="contact.html" class="nav-link">Contact</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <article class="article">
+            <!-- Hero Section -->
+            <div class="waitlist-hero">
+                <div class="container">
+                    <span class="launch-badge">Launching March 2026</span>
+                    <h1 class="hero-title">RLDX Early Access</h1>
+                    <p class="hero-subtitle">
+                        Sign up for early access to RLDX — Vision-Language-Action models designed for real-world dexterous manipulation.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Model Info -->
+            <div class="container">
+                <div class="model-cards">
+                    <div class="model-card">
+                        <h4>RLDX-S0 — Specialized Dexterity</h4>
+                        <p>High-frequency control for precision manipulation. Compact (&lt;1B params), fast, and purpose-built for tasks that grippers can't handle.</p>
+                    </div>
+                    <div class="model-card">
+                        <h4>RLDX-G0 — Generalist VLA</h4>
+                        <p>Multi-task foundation model (8B params) with VLM knowledge inheritance. From logistics picking to complex bimanual coordination.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Waitlist Form -->
+            <div class="container">
+                <div class="waitlist-form-container">
+                    <form id="waitlistForm">
+
+                        <!-- Section 1: Contact -->
+                        <div class="form-section">
+                            <div class="section-header">
+                                <div class="section-number">Section 1 of 5</div>
+                                <h3 class="section-title">Contact Information</h3>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="fullName" class="form-label">Full Name *</label>
+                                <input type="text" id="fullName" name="fullName" class="form-input" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email" class="form-label">Email * <span style="color: var(--text-light); font-weight: normal;">(work email preferred)</span></label>
+                                <input type="email" id="email" name="email" class="form-input" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="organization" class="form-label">Organization / Company *</label>
+                                <input type="text" id="organization" name="organization" class="form-input" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="country" class="form-label">Country *</label>
+                                <select id="country" name="country" class="form-select" required>
+                                    <option value="">Select your country</option>
+                                    <option value="US">United States</option>
+                                    <option value="KR">South Korea</option>
+                                    <option value="JP">Japan</option>
+                                    <option value="CN">China</option>
+                                    <option value="DE">Germany</option>
+                                    <option value="UK">United Kingdom</option>
+                                    <option value="CA">Canada</option>
+                                    <option value="AU">Australia</option>
+                                    <option value="SG">Singapore</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Section 2: Who You Are -->
+                        <div class="form-section">
+                            <div class="section-header">
+                                <div class="section-number">Section 2 of 5</div>
+                                <h3 class="section-title">Who You Are</h3>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">What best describes you? *</label>
+                                <div class="option-group" id="roleGroup">
+                                    <label class="option-item">
+                                        <input type="radio" name="role" value="researcher" required>
+                                        <span class="option-label">Robotics Researcher / Engineer</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="radio" name="role" value="founder">
+                                        <span class="option-label">Physical AI Startup Founder</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="radio" name="role" value="investor">
+                                        <span class="option-label">Investor / VC</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="radio" name="role" value="media">
+                                        <span class="option-label">Media / Journalist / Content Creator</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="radio" name="role" value="corporate">
+                                        <span class="option-label">Corporate (exploring deployment)</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="radio" name="role" value="student">
+                                        <span class="option-label">Student / Academic</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="radio" name="role" value="hobbyist">
+                                        <span class="option-label">Hobbyist / Maker</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="radio" name="role" value="other">
+                                        <span class="option-label">Other</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Organization Type *</label>
+                                <div class="option-group">
+                                    <label class="option-item">
+                                        <input type="radio" name="orgType" value="university" required>
+                                        <span class="option-label">University / Research Institution</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="radio" name="orgType" value="robot_mfr">
+                                        <span class="option-label">Robot Manufacturer</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="radio" name="orgType" value="ai_sw">
+                                        <span class="option-label">AI Software Company</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="radio" name="orgType" value="integrator">
+                                        <span class="option-label">System Integrator / Solution Provider</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="radio" name="orgType" value="end_user">
+                                        <span class="option-label">End-User (Factory, Warehouse, etc.)</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="radio" name="orgType" value="startup">
+                                        <span class="option-label">Startup</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="radio" name="orgType" value="vc">
+                                        <span class="option-label">VC / Investment Firm</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="radio" name="orgType" value="media_press">
+                                        <span class="option-label">Media / Press</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="radio" name="orgType" value="other">
+                                        <span class="option-label">Other</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Which communities are you part of? <span style="color: var(--text-light); font-weight: normal;">(optional, select all that apply)</span></label>
+                                <div class="option-grid">
+                                    <label class="option-item">
+                                        <input type="checkbox" name="communities" value="openarm">
+                                        <span class="option-label">OpenArm</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="communities" value="lerobot">
+                                        <span class="option-label">LeRobot</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="communities" value="huggingface">
+                                        <span class="option-label">Hugging Face Robotics</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="communities" value="ros">
+                                        <span class="option-label">ROS Community</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="communities" value="pai_social">
+                                        <span class="option-label">Physical AI Discord / Twitter</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="communities" value="none">
+                                        <span class="option-label">None</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 3: Robot & Hardware -->
+                        <div class="form-section">
+                            <div class="section-header">
+                                <div class="section-number">Section 3 of 5</div>
+                                <h3 class="section-title">Robot & Hardware</h3>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Do you have access to a robot? *</label>
+                                <div class="option-group" id="robotAccessGroup">
+                                    <label class="option-item">
+                                        <input type="radio" name="robotAccess" value="own" required>
+                                        <span class="option-label">Yes, I own/operate robots</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="radio" name="robotAccess" value="lab">
+                                        <span class="option-label">Yes, through my lab/company</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="radio" name="robotAccess" value="planning">
+                                        <span class="option-label">No, but planning to get one</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="radio" name="robotAccess" value="interested">
+                                        <span class="option-label">No, just interested</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Conditional: Robot Type -->
+                            <div class="form-group conditional-field" id="robotTypeField">
+                                <label class="form-label">Robot Type(s) <span style="color: var(--text-light); font-weight: normal;">(select all that apply)</span></label>
+                                <div class="option-grid">
+                                    <label class="option-item">
+                                        <input type="checkbox" name="robotType" value="humanoid">
+                                        <span class="option-label">Humanoid (full-body)</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="robotType" value="bimanual">
+                                        <span class="option-label">Bimanual Arm System</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="robotType" value="single_arm">
+                                        <span class="option-label">Single Arm (6-7 DOF)</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="robotType" value="mobile">
+                                        <span class="option-label">Mobile Manipulator</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="robotType" value="dexterous_hand">
+                                        <span class="option-label">Dexterous Hand System</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="robotType" value="other">
+                                        <span class="option-label">Other</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Conditional: Robot Brand -->
+                            <div class="form-group conditional-field" id="robotBrandField">
+                                <label class="form-label">Robot Brand(s) <span style="color: var(--text-light); font-weight: normal;">(select all that apply)</span></label>
+                                <div class="option-grid">
+                                    <label class="option-item">
+                                        <input type="checkbox" name="robotBrand" value="aloha">
+                                        <span class="option-label">ALOHA</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="robotBrand" value="franka">
+                                        <span class="option-label">Franka</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="robotBrand" value="kuka">
+                                        <span class="option-label">KUKA</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="robotBrand" value="ur">
+                                        <span class="option-label">Universal Robots</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="robotBrand" value="unitree">
+                                        <span class="option-label">Unitree</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="robotBrand" value="fourier">
+                                        <span class="option-label">Fourier</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="robotBrand" value="agilex">
+                                        <span class="option-label">AgileX</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="robotBrand" value="trossen">
+                                        <span class="option-label">Trossen</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="robotBrand" value="lerobot_so100">
+                                        <span class="option-label">LeRobot SO-100</span>
+                                    </label>
+                                    <label class="option-item" style="border-color: var(--primary-color);">
+                                        <input type="checkbox" name="robotBrand" value="rlwrld">
+                                        <span class="option-label" style="color: var(--primary-color);">RLWRLD ALLEX / OpenArm</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="robotBrand" value="custom">
+                                        <span class="option-label">Custom-built</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="robotBrand" value="other">
+                                        <span class="option-label">Other</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Conditional: GPU/Simulation Hardware -->
+                            <div class="form-group conditional-field" id="gpuField">
+                                <label class="form-label">Do you have access to simulation hardware? <span style="color: var(--text-light); font-weight: normal;">(for Isaac Sim testing)</span></label>
+                                <div class="option-group">
+                                    <label class="option-item">
+                                        <input type="radio" name="gpuAccess" value="rtx4080_plus">
+                                        <div class="option-content">
+                                            <div class="option-label">Yes, RTX 4080 or higher (16GB+ VRAM)</div>
+                                            <div class="option-description">Recommended for Isaac Lab Arena evaluation</div>
+                                        </div>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="radio" name="gpuAccess" value="rtx4070">
+                                        <div class="option-content">
+                                            <div class="option-label">Yes, RTX 4070 or similar (12-16GB VRAM)</div>
+                                            <div class="option-description">Basic simulation capable</div>
+                                        </div>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="radio" name="gpuAccess" value="lower">
+                                        <span class="option-label">Yes, but lower-end GPU</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="radio" name="gpuAccess" value="cloud">
+                                        <span class="option-label">No GPU / Cloud only</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="radio" name="gpuAccess" value="not_sure">
+                                        <span class="option-label">Not sure</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 4: Interest in RLDX -->
+                        <div class="form-section">
+                            <div class="section-header">
+                                <div class="section-number">Section 4 of 5</div>
+                                <h3 class="section-title">Interest in RLDX</h3>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Which RLDX model interests you? *</label>
+                                <div class="option-group">
+                                    <label class="option-item">
+                                        <input type="checkbox" name="modelInterest" value="s0" required>
+                                        <div class="option-content">
+                                            <div class="option-label">RLDX-S0 — Specialized Dexterity</div>
+                                            <div class="option-description">High-freq, &lt;1B params, precision manipulation</div>
+                                        </div>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="modelInterest" value="g0">
+                                        <div class="option-content">
+                                            <div class="option-label">RLDX-G0 — Generalist VLA</div>
+                                            <div class="option-description">Multi-task, 8B params, broad capabilities</div>
+                                        </div>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="modelInterest" value="both">
+                                        <span class="option-label">Both / Not sure yet</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">What do you want to do with RLDX? * <span style="color: var(--text-light); font-weight: normal;">(select all that apply)</span></label>
+                                <div class="option-grid">
+                                    <label class="option-item">
+                                        <input type="checkbox" name="useCase" value="evaluate" required>
+                                        <span class="option-label">Evaluate / benchmark</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="useCase" value="finetune">
+                                        <span class="option-label">Fine-tune for my tasks</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="useCase" value="deploy">
+                                        <span class="option-label">Deploy in production / pilot</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="useCase" value="research">
+                                        <span class="option-label">Research / publish papers</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="useCase" value="content">
+                                        <span class="option-label">Create content / review</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="useCase" value="investment">
+                                        <span class="option-label">Investment evaluation</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="useCase" value="explore">
+                                        <span class="option-label">Just explore</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">What applications are you exploring? * <span style="color: var(--text-light); font-weight: normal;">(select all that apply)</span></label>
+                                <div class="option-grid">
+                                    <label class="option-item">
+                                        <input type="checkbox" name="applications" value="dexterous" required>
+                                        <span class="option-label">Dexterous manipulation</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="applications" value="pick_place">
+                                        <span class="option-label">Pick & place</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="applications" value="assembly">
+                                        <span class="option-label">Assembly</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="applications" value="logistics">
+                                        <span class="option-label">Logistics / packaging</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="applications" value="food">
+                                        <span class="option-label">Food handling</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="applications" value="tool_use">
+                                        <span class="option-label">Tool use</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="applications" value="benchmarking">
+                                        <span class="option-label">Research & benchmarking</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="checkbox" name="applications" value="other">
+                                        <span class="option-label">Other</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Would you share your experience publicly? *</label>
+                                <div class="option-group">
+                                    <label class="option-item">
+                                        <input type="radio" name="shareExperience" value="create_content" required>
+                                        <div class="option-content">
+                                            <div class="option-label">Yes, I'd create content (video/blog/social)</div>
+                                            <div class="option-description">Priority access for content creators</div>
+                                        </div>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="radio" name="shareExperience" value="testimonial">
+                                        <span class="option-label">Yes, I'd give a testimonial</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="radio" name="shareExperience" value="maybe">
+                                        <span class="option-label">Maybe, depends on results</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="radio" name="shareExperience" value="private">
+                                        <span class="option-label">No, prefer private</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 5: Event & Engagement -->
+                        <div class="form-section">
+                            <div class="section-header">
+                                <div class="section-number">Section 5 of 5</div>
+                                <h3 class="section-title">Event & Engagement</h3>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Would you attend an RLDX launch event? *</label>
+                                <div class="option-group">
+                                    <label class="option-item">
+                                        <input type="radio" name="eventAttendance" value="us_inperson" required>
+                                        <span class="option-label">Yes, in person (US)</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="radio" name="eventAttendance" value="kr_inperson">
+                                        <span class="option-label">Yes, in person (Korea)</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="radio" name="eventAttendance" value="jp_inperson">
+                                        <span class="option-label">Yes, in person (Japan)</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="radio" name="eventAttendance" value="virtual">
+                                        <span class="option-label">Yes, virtually</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="radio" name="eventAttendance" value="maybe">
+                                        <span class="option-label">Maybe</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="radio" name="eventAttendance" value="no">
+                                        <span class="option-label">No</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">How did you hear about RLDX? *</label>
+                                <div class="option-group">
+                                    <label class="option-item">
+                                        <input type="radio" name="referralSource" value="social" required>
+                                        <span class="option-label">LinkedIn / Twitter / YouTube / Instagram</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="radio" name="referralSource" value="news">
+                                        <span class="option-label">News article / Conference</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="radio" name="referralSource" value="word_of_mouth">
+                                        <span class="option-label">Colleague / Word of mouth</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="radio" name="referralSource" value="website">
+                                        <span class="option-label">RLWRLD website</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="radio" name="referralSource" value="other">
+                                        <span class="option-label">Other</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit -->
+                        <div class="submit-section">
+                            <button type="submit" class="btn btn-large" style="min-width: 200px;">Join Waitlist</button>
+                            <p class="submit-note">We'll notify you when RLDX is ready for early access.</p>
+                        </div>
+                    </form>
+
+                    <!-- Success Message -->
+                    <div class="success-message" id="successMessage">
+                        <div class="success-icon">✓</div>
+                        <h2>You're on the list!</h2>
+                        <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                            Thank you for signing up for RLDX Early Access.<br>
+                            We'll be in touch when it's your turn.
+                        </p>
+                        <a href="index.html" class="btn">Back to Home</a>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" style="margin-top: 2rem;">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="assets/logos/RLWRLD-compact-logo-white.svg" alt="RLWRLD" class="footer-logo-img">
+                </div>
+                <div style="display: flex; gap: 1.5rem; margin: 1rem 0;">
+                    <a href="https://x.com/RLWRLD_ai" target="_blank" style="color: var(--text-secondary); transition: var(--transition);">X (Twitter)</a>
+                    <a href="https://www.linkedin.com/company/rlwrld/" target="_blank" style="color: var(--text-secondary); transition: var(--transition);">LinkedIn</a>
+                    <a href="https://www.youtube.com/@rlwrld.dexterity" target="_blank" style="color: var(--text-secondary); transition: var(--transition);">YouTube</a>
+                </div>
+                <p class="footer-text">&copy; 2026 RLWRLD Inc. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script>
+        // Waitlist Form Logic
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('waitlistForm');
+            const successMessage = document.getElementById('successMessage');
+
+            // Conditional fields
+            const robotAccessGroup = document.querySelectorAll('input[name="robotAccess"]');
+            const robotTypeField = document.getElementById('robotTypeField');
+            const robotBrandField = document.getElementById('robotBrandField');
+            const gpuField = document.getElementById('gpuField');
+
+            // Handle robot access conditional logic
+            robotAccessGroup.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const hasRobot = this.value === 'own' || this.value === 'lab';
+
+                    if (hasRobot) {
+                        robotTypeField.classList.add('visible');
+                        robotBrandField.classList.add('visible');
+                        gpuField.classList.add('visible');
+                    } else {
+                        robotTypeField.classList.remove('visible');
+                        robotBrandField.classList.remove('visible');
+                        gpuField.classList.remove('visible');
+                    }
+                });
+            });
+
+            // Handle option item selection styling
+            document.querySelectorAll('.option-item input').forEach(input => {
+                input.addEventListener('change', function() {
+                    // For radio buttons, remove selected from siblings
+                    if (this.type === 'radio') {
+                        const name = this.name;
+                        document.querySelectorAll(`input[name="${name}"]`).forEach(sibling => {
+                            sibling.closest('.option-item').classList.remove('selected');
+                        });
+                    }
+
+                    // Toggle selected class
+                    if (this.checked) {
+                        this.closest('.option-item').classList.add('selected');
+                    } else {
+                        this.closest('.option-item').classList.remove('selected');
+                    }
+                });
+            });
+
+            // Handle form submission
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                // Collect form data
+                const formData = new FormData(form);
+                const data = {};
+
+                formData.forEach((value, key) => {
+                    if (data[key]) {
+                        // Handle multi-select (checkboxes)
+                        if (Array.isArray(data[key])) {
+                            data[key].push(value);
+                        } else {
+                            data[key] = [data[key], value];
+                        }
+                    } else {
+                        data[key] = value;
+                    }
+                });
+
+                // Add timestamp
+                data.submittedAt = new Date().toISOString();
+
+                // Log to console (for mockup)
+                console.log('=== RLDX Waitlist Submission ===');
+                console.log(JSON.stringify(data, null, 2));
+
+                // Save to localStorage (for mockup persistence)
+                const submissions = JSON.parse(localStorage.getItem('rldx_waitlist') || '[]');
+                submissions.push(data);
+                localStorage.setItem('rldx_waitlist', JSON.stringify(submissions));
+
+                console.log(`Total submissions: ${submissions.length}`);
+
+                // Show success message
+                form.style.display = 'none';
+                successMessage.classList.add('visible');
+
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            // Helper: View all submissions (for debugging)
+            window.viewSubmissions = function() {
+                const submissions = JSON.parse(localStorage.getItem('rldx_waitlist') || '[]');
+                console.table(submissions);
+                return submissions;
+            };
+
+            window.clearSubmissions = function() {
+                localStorage.removeItem('rldx_waitlist');
+                console.log('All submissions cleared.');
+            };
+        });
+    </script>
+</body>
+</html>
