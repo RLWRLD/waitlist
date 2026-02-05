@@ -144,6 +144,62 @@ All content is based on `/Users/jacey/Library/Mobile Documents/iCloud~md~obsidia
 
 ---
 
+## 🗄️ Waitlist Backend (Supabase)
+
+The waitlist form (`/rlwrld/waitlist.html`) stores submissions in Supabase.
+
+### Setup Instructions
+
+1. **Create Supabase Account**
+   - Go to https://supabase.com
+   - Sign up with GitHub
+
+2. **Create New Project**
+   - Click "New Project"
+   - Name: `rlwrld-waitlist`
+   - Region: `Northeast Asia (Seoul)`
+   - Set a database password and save it
+
+3. **Create Waitlist Table**
+   - Go to SQL Editor
+   - Run this query:
+   ```sql
+   create table waitlist (
+     id bigint primary key generated always as identity,
+     created_at timestamptz default now(),
+     email text not null,
+     full_name text,
+     organization text,
+     country text,
+     social_profile text,
+     form_data jsonb
+   );
+
+   -- Prevent duplicate emails
+   create unique index waitlist_email_unique on waitlist(email);
+
+   -- Allow public inserts
+   alter table waitlist enable row level security;
+
+   create policy "Anyone can insert" on waitlist
+     for insert with check (true);
+   ```
+
+4. **Get API Credentials**
+   - Go to Project Settings > API
+   - Copy `Project URL` and `anon public` key
+   - Update these values in `waitlist.html`:
+   ```javascript
+   const SUPABASE_URL = 'https://your-project.supabase.co';
+   const SUPABASE_ANON_KEY = 'your-anon-key';
+   ```
+
+5. **View Submissions**
+   - Go to Table Editor > waitlist
+   - Export as CSV if needed
+
+---
+
 **Created**: 2025-10-31
 **Design System**: Based on RLDX-web
 **Framework**: Vanilla HTML/CSS/JS (no dependencies)

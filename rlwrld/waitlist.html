@@ -1116,9 +1116,51 @@
                 });
             });
 
+            // Supabase 설정
+            const SUPABASE_URL = 'https://qtbnnkwvgcpsutcxarnj.supabase.co';
+            const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF0Ym5ua3d2Z2Nwc3V0Y3hhcm5qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyODYyNjIsImV4cCI6MjA4NTg2MjI2Mn0.kQVvDs3YFwvVbU947KueOAdQLraCbkPXRScYiVQ4APk';
+
+            // 필수 필드 validation
+            function validateForm() {
+                const missing = [];
+
+                // 텍스트/이메일 필드
+                if (!document.getElementById('fullName').value.trim()) missing.push('Full Name');
+                if (!document.getElementById('email').value.trim()) missing.push('Email');
+                if (!document.getElementById('organization').value.trim()) missing.push('Organization');
+                if (!document.getElementById('country').value) missing.push('Country');
+
+                // 라디오 버튼 그룹
+                if (!document.querySelector('input[name="affiliation"]:checked')) missing.push('Organization Type');
+                if (!document.querySelector('input[name="robotAccess"]:checked')) missing.push('Robot Access');
+                if (!document.querySelector('input[name="simAccess"]:checked')) missing.push('Simulation Environment');
+                if (!document.querySelector('input[name="shareExperience"]:checked')) missing.push('Share Experience');
+                if (!document.querySelector('input[name="eventAttendance"]:checked')) missing.push('Event Attendance');
+                if (!document.querySelector('input[name="referralSource"]:checked')) missing.push('How did you hear about RLDX');
+
+                // 체크박스 그룹 (최소 1개 선택)
+                if (!document.querySelector('input[name="useCase"]:checked')) missing.push('What do you want to do with RLDX');
+                if (!document.querySelector('input[name="applications"]:checked')) missing.push('Tasks you are interested in');
+
+                return missing;
+            }
+
             // Handle form submission
-            form.addEventListener('submit', function(e) {
+            form.addEventListener('submit', async function(e) {
                 e.preventDefault();
+
+                // Validation 체크
+                const missingFields = validateForm();
+                if (missingFields.length > 0) {
+                    alert('Please fill in the following required fields:\n\n• ' + missingFields.join('\n• '));
+                    return;
+                }
+
+                // 버튼 비활성화 (중복 제출 방지)
+                const submitBtn = form.querySelector('button[type="submit"]');
+                const originalText = submitBtn.textContent;
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Submitting...';
 
                 // Collect form data
                 const formData = new FormData(form);
@@ -1137,26 +1179,46 @@
                     }
                 });
 
-                // Add timestamp
-                data.submittedAt = new Date().toISOString();
+                try {
+                    // Supabase에 데이터 저장
+                    const response = await fetch(`${SUPABASE_URL}/rest/v1/waitlist`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'apikey': SUPABASE_ANON_KEY,
+                            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                            'Prefer': 'return=minimal'
+                        },
+                        body: JSON.stringify({
+                            email: data.email,
+                            full_name: data.fullName,
+                            organization: data.organization,
+                            country: data.country,
+                            social_profile: data.socialProfile || null,
+                            form_data: data  // 전체 폼 데이터를 JSON으로 저장
+                        })
+                    });
 
-                // Log to console (for mockup)
-                console.log('=== RLDX Waitlist Submission ===');
-                console.log(JSON.stringify(data, null, 2));
-
-                // Save to localStorage (for mockup persistence)
-                const submissions = JSON.parse(localStorage.getItem('rldx_waitlist') || '[]');
-                submissions.push(data);
-                localStorage.setItem('rldx_waitlist', JSON.stringify(submissions));
-
-                console.log(`Total submissions: ${submissions.length}`);
-
-                // Show success message
-                form.style.display = 'none';
-                successMessage.classList.add('visible');
-
-                // Scroll to top
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                    if (response.ok) {
+                        // 성공
+                        console.log('✅ Waitlist submission saved to Supabase');
+                        form.style.display = 'none';
+                        successMessage.classList.add('visible');
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    } else if (response.status === 409) {
+                        // 이메일 중복
+                        alert('This email is already on the waitlist!');
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = originalText;
+                    } else {
+                        throw new Error(`Server error: ${response.status}`);
+                    }
+                } catch (error) {
+                    console.error('❌ Submission failed:', error);
+                    alert('Something went wrong. Please try again.');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalText;
+                }
             });
 
             // Helper: View all submissions (for debugging)
