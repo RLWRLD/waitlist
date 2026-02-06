@@ -864,7 +864,7 @@
                                 <label class="form-label">What do you want to do with RLDX? * <span style="color: var(--text-light); font-weight: normal;">(select all that apply)</span></label>
                                 <div class="option-grid">
                                     <label class="option-item">
-                                        <input type="checkbox" name="useCase" value="benchmark" required>
+                                        <input type="checkbox" name="useCase" value="benchmark">
                                         <span class="option-label">Benchmark against other models</span>
                                     </label>
                                     <label class="option-item">
@@ -898,7 +898,7 @@
                                 <label class="form-label">What tasks are you interested in? * <span style="color: var(--text-light); font-weight: normal;">(select all that apply)</span></label>
                                 <div class="option-grid">
                                     <label class="option-item">
-                                        <input type="checkbox" name="applications" value="bin_picking" required>
+                                        <input type="checkbox" name="applications" value="bin_picking">
                                         <span class="option-label">Bin picking / sorting</span>
                                     </label>
                                     <label class="option-item">
@@ -1061,7 +1061,11 @@
 
                     <!-- Success Message -->
                     <div class="success-message" id="successMessage">
-                        <div class="success-icon">\u2713</div>
+                        <div class="success-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </div>
                         <h2>You're on the list!</h2>
                         <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
                             Thank you for signing up for RLDX Early Access.<br>
@@ -1202,9 +1206,28 @@
                 });
             });
 
+            // Custom validation for checkbox groups (at least 1 required)
+            function validateCheckboxGroups() {
+                const missing = [];
+
+                if (!document.querySelector('input[name="useCase"]:checked'))
+                    missing.push('What do you want to do with RLDX');
+                if (!document.querySelector('input[name="applications"]:checked'))
+                    missing.push('Tasks you are interested in');
+
+                return missing;
+            }
+
             // Handle form submission
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
+
+                // Validate checkbox groups
+                const missingFields = validateCheckboxGroups();
+                if (missingFields.length > 0) {
+                    alert('Please select at least one option for:\n\n• ' + missingFields.join('\n• '));
+                    return;
+                }
 
                 // Collect form data
                 const formData = new FormData(form);
@@ -1236,6 +1259,10 @@
                 localStorage.setItem('rldx_waitlist', JSON.stringify(submissions));
 
                 console.log(`Total submissions: ${submissions.length}`);
+
+                // Update hero subtitle for success state
+                document.querySelector('.hero-subtitle').textContent =
+                    'General-purpose dexterity, purpose-built. RLDX is coming for the real world.';
 
                 // Show success message
                 form.style.display = 'none';
