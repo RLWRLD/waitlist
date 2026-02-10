@@ -31,3 +31,6 @@ Temporary Items
 
 # Playwright
 .playwright-mcp/
+
+# Sync config (contains secret keys)
+sync-config.json

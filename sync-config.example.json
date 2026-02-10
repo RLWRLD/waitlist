@@ -1,0 +1,10 @@
+{
+  "supabase": {
+    "url": "https://YOUR_PROJECT.supabase.co",
+    "serviceRoleKey": "YOUR_SUPABASE_SERVICE_ROLE_KEY"
+  },
+  "notion": {
+    "token": "YOUR_NOTION_API_TOKEN",
+    "databaseId": "YOUR_NOTION_DATABASE_ID"
+  }
+}
