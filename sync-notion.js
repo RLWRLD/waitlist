@@ -428,6 +428,66 @@ async function createNotionPage(properties, children) {
 }
 
 // ============================================
+// Dry-run preview — terminal-formatted profile
+// ============================================
+
+function printPreview(row) {
+  const fd = row.form_data || {};
+  const name = row.full_name || fd.fullName || 'Unknown';
+  const email = row.email || fd.email || '';
+  const org = row.organization || fd.organization || '';
+  const country = label(LABELS.country, row.country || fd.country);
+  const social = row.social_profile || fd.socialProfile || '';
+
+  let affText = label(LABELS.affiliation, fd.affiliation);
+  if (fd.affiliation === 'other' && fd.affiliationOther) affText = `Other: ${fd.affiliationOther}`;
+  const role = deriveRole(fd);
+
+  const robotText = label(LABELS.robotAccess, fd.robotAccess);
+  const hasRobot = ['own', 'lab', 'planning'].includes(fd.robotAccess);
+  const brands = hasRobot ? labelArray(LABELS.robotBrand, fd.robotBrand) : [];
+  if (hasRobot && fd.robotBrandOther) brands.push(fd.robotBrandOther);
+  const types = hasRobot ? labelArray(LABELS.robotType, fd.robotType) : [];
+  if (hasRobot && fd.robotTypeOther) types.push(fd.robotTypeOther);
+
+  const sim = label(LABELS.simAccess, fd.simAccess);
+  const useCases = labelArray(LABELS.useCase, fd.useCase);
+  const apps = labelArray(LABELS.applications, fd.applications);
+  if (fd.applicationsOther) apps.push(fd.applicationsOther);
+  const event = label(LABELS.eventAttendance, fd.eventAttendance);
+
+  let referral = label(LABELS.referralSource, fd.referralSource);
+  if (fd.referralSource === 'other' && fd.referralSourceOther) referral = fd.referralSourceOther;
+
+  const share = label(LABELS.shareWilling, fd.shareWilling);
+  const communities = labelArray(LABELS.communities, fd.communities);
+  if (fd.communitiesOther) communities.push(fd.communitiesOther);
+
+  const w = 56;
+  const line = '─'.repeat(w);
+  const pad = (s) => s + ' '.repeat(Math.max(0, w - 2 - s.length));
+
+  console.log(`  ┌${line}┐`);
+  console.log(`  │ ${pad(`${name} — ${org}`)}│`);
+  console.log(`  │ ${pad(`${email} · ${country}`)}│`);
+  if (social) console.log(`  │ ${pad(social)}│`);
+  console.log(`  ├${line}┤`);
+  console.log(`  │ ${pad(`Affiliation: ${affText}${role ? ' → ' + role : ''}`)}│`);
+  if (communities.length) console.log(`  │ ${pad(`Communities: ${communities.join(', ')}`)}│`);
+  console.log(`  ├${line}┤`);
+  console.log(`  │ ${pad(`Robot: ${robotText}`)}│`);
+  if (types.length) console.log(`  │ ${pad(`  Types: ${types.join(', ')}`)}│`);
+  if (brands.length) console.log(`  │ ${pad(`  Brands: ${brands.join(', ')}`)}│`);
+  console.log(`  │ ${pad(`Sim: ${sim}`)}│`);
+  console.log(`  ├${line}┤`);
+  console.log(`  │ ${pad(`Use Cases: ${useCases.join(', ') || '—'}`)}│`);
+  console.log(`  │ ${pad(`Tasks: ${apps.join(', ') || '—'}`)}│`);
+  console.log(`  │ ${pad(`Share: ${share} | Event: ${event}`)}│`);
+  console.log(`  │ ${pad(`Referral: ${referral}`)}│`);
+  console.log(`  └${line}┘`);
+}
+
+// ============================================
 // Main
 // ============================================
 
@@ -474,7 +534,7 @@ async function main() {
       const children = buildPageContent(row);
 
       if (DRY_RUN) {
-        console.log(`  [DRY] Would create: ${name} (${email})`);
+        printPreview(row);
         created++;
         continue;
       }
