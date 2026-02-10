@@ -160,6 +160,18 @@
             line-height: 12px;
         }
 
+        /* Exclusive checkboxes styled as radio (circle + dot) */
+        #communitiesNoneCheckbox:checked::after,
+        #useCaseExploreCheckbox:checked::after {
+            content: '';
+            display: block;
+            width: 6px;
+            height: 6px;
+            background: var(--background);
+            border-radius: 50%;
+            margin: 3px;
+        }
+
         .option-content {
             flex: 1;
             min-width: 0;
@@ -539,7 +551,7 @@
                                     </label>
                                 </div>
                                 <div class="conditional-field" id="affiliationOtherField" style="margin-top: 0.75rem; margin-left: 0; padding-left: 0; border-left: none;">
-                                    <input type="text" name="affiliationOther" class="form-input" placeholder="Please specify (optional)">
+                                    <input type="text" name="affiliationOther" class="form-input" placeholder="Please specify">
                                 </div>
                             </div>
 
@@ -548,7 +560,7 @@
                                 <label class="form-label">What is your role? *</label>
                                 <div class="option-group">
                                     <label class="option-item">
-                                        <input type="radio" name="academicRole" value="professor">
+                                        <input type="radio" name="academicRole" value="professor" required>
                                         <span class="option-label">Professor / PI</span>
                                     </label>
                                     <label class="option-item">
@@ -567,7 +579,7 @@
                                 <label class="form-label">What is your role? *</label>
                                 <div class="option-group">
                                     <label class="option-item">
-                                        <input type="radio" name="industryRole" value="rd">
+                                        <input type="radio" name="industryRole" value="rd" required>
                                         <span class="option-label">R&D / Research</span>
                                     </label>
                                     <label class="option-item">
@@ -644,7 +656,7 @@
                                 <label class="form-label">What is your role? *</label>
                                 <div class="option-group">
                                     <label class="option-item">
-                                        <input type="radio" name="startupRole" value="founder">
+                                        <input type="radio" name="startupRole" value="founder" required>
                                         <span class="option-label">Founder / C-level</span>
                                     </label>
                                     <label class="option-item">
@@ -657,7 +669,7 @@
                                     </label>
                                 </div>
                                 <div class="conditional-field" id="startupRoleOtherField" style="margin-top: 0.75rem; margin-left: 0; padding-left: 0; border-left: none;">
-                                    <input type="text" name="startupRoleOther" class="form-input" placeholder="Please specify (optional)">
+                                    <input type="text" name="startupRoleOther" class="form-input" placeholder="Please specify">
                                 </div>
                             </div>
 
@@ -685,7 +697,7 @@
                                         <span class="option-label">Physical AI Discord / Twitter</span>
                                     </label>
                                     <label class="option-item">
-                                        <input type="checkbox" name="communities" value="none">
+                                        <input type="checkbox" name="communities" value="none" id="communitiesNoneCheckbox" style="border-radius: 50%;">
                                         <span class="option-label">None</span>
                                     </label>
                                     <label class="option-item">
@@ -888,7 +900,7 @@
                                         <span class="option-label">Personal project / hobby</span>
                                     </label>
                                     <label class="option-item">
-                                        <input type="checkbox" name="useCase" value="explore">
+                                        <input type="checkbox" name="useCase" value="explore" id="useCaseExploreCheckbox" style="border-radius: 50%;">
                                         <span class="option-label">Just explore</span>
                                     </label>
                                 </div>
@@ -1047,9 +1059,15 @@
                                     </label>
                                 </div>
                                 <div class="conditional-field" id="referralSourceOtherField" style="margin-top: 0.75rem; margin-left: 0; padding-left: 0; border-left: none;">
-                                    <input type="text" name="referralSourceOther" class="form-input" placeholder="Please specify (optional)">
+                                    <input type="text" name="referralSourceOther" class="form-input" placeholder="Please specify">
                                 </div>
                             </div>
+                        </div>
+
+                        <!-- Honeypot (anti-spam, hidden from real users) -->
+                        <div aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;">
+                            <label for="website">Website</label>
+                            <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
                         </div>
 
                         <!-- Submit -->
@@ -1101,6 +1119,21 @@
             const form = document.getElementById('waitlistForm');
             const successMessage = document.getElementById('successMessage');
 
+            // Clear all inputs inside a container (radios, checkboxes, text) + remove styling
+            function clearFieldInputs(container) {
+                container.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(input => {
+                    input.checked = false;
+                    input.closest('.option-item')?.classList.remove('selected');
+                });
+                container.querySelectorAll('input[type="text"], input[type="url"]').forEach(input => {
+                    input.value = '';
+                });
+                // Also hide any nested conditional "Other" fields
+                container.querySelectorAll('.conditional-field').forEach(f => {
+                    f.classList.remove('visible');
+                });
+            }
+
             // Conditional fields
             const robotAccessGroup = document.querySelectorAll('input[name="robotAccess"]');
             const robotTypeField = document.getElementById('robotTypeField');
@@ -1114,11 +1147,12 @@
             // Handle affiliation conditional logic
             affiliationGroup.forEach(radio => {
                 radio.addEventListener('change', function() {
-                    // Hide all conditional fields first
-                    academicRoleField.classList.remove('visible');
-                    industryRoleField.classList.remove('visible');
-                    industryField.classList.remove('visible');
-                    startupRoleField.classList.remove('visible');
+                    // Hide + clear all conditional fields first
+                    [academicRoleField, industryRoleField, industryField, startupRoleField].forEach(field => {
+                        if (!field.classList.contains('visible')) return;
+                        field.classList.remove('visible');
+                        clearFieldInputs(field);
+                    });
 
                     // Show relevant fields based on affiliation
                     if (this.value === 'academic') {
@@ -1139,9 +1173,9 @@
                 { checkbox: 'robotTypeOtherCheckbox', field: 'robotTypeOtherField', type: 'checkbox' },
                 { checkbox: 'robotBrandOtherCheckbox', field: 'robotBrandOtherField', type: 'checkbox' },
                 { checkbox: 'applicationsOtherCheckbox', field: 'applicationsOtherField', type: 'checkbox' },
-                { checkbox: 'affiliationOtherRadio', field: 'affiliationOtherField', type: 'radio', name: 'affiliation' },
-                { checkbox: 'startupRoleOtherRadio', field: 'startupRoleOtherField', type: 'radio', name: 'startupRole' },
-                { checkbox: 'referralSourceOtherRadio', field: 'referralSourceOtherField', type: 'radio', name: 'referralSource' }
+                { checkbox: 'affiliationOtherRadio', field: 'affiliationOtherField', type: 'radio', name: 'affiliation', specifyRequired: true },
+                { checkbox: 'startupRoleOtherRadio', field: 'startupRoleOtherField', type: 'radio', name: 'startupRole', specifyRequired: true },
+                { checkbox: 'referralSourceOtherRadio', field: 'referralSourceOtherField', type: 'radio', name: 'referralSource', specifyRequired: true }
             ];
 
             otherFields.forEach(config => {
@@ -1150,24 +1184,89 @@
                 if (input && field) {
                     if (config.type === 'checkbox') {
                         input.addEventListener('change', function() {
-                            field.classList.toggle('visible', this.checked);
+                            const show = this.checked;
+                            field.classList.toggle('visible', show);
+                            if (!show) clearFieldInputs(field);
                         });
                     } else {
-                        // For radio buttons, listen to all radios in the group
                         document.querySelectorAll(`input[name="${config.name}"]`).forEach(radio => {
                             radio.addEventListener('change', function() {
-                                field.classList.toggle('visible', this.value === 'other');
+                                const show = this.value === 'other';
+                                field.classList.toggle('visible', show);
+                                const specifyInput = field.querySelector('input');
+                                if (show) {
+                                    if (config.specifyRequired && specifyInput) specifyInput.setAttribute('required', '');
+                                } else {
+                                    if (config.specifyRequired && specifyInput) specifyInput.removeAttribute('required');
+                                    clearFieldInputs(field);
+                                }
                             });
                         });
                     }
                 }
             });
 
+            // Handle communities "None" mutual exclusion
+            const communitiesNone = document.getElementById('communitiesNoneCheckbox');
+            const communitiesOtherField = document.getElementById('communitiesOtherField');
+            const communityCbs = document.querySelectorAll('input[name="communities"]');
+
+            communitiesNone.addEventListener('change', function() {
+                if (this.checked) {
+                    // Uncheck all other communities + clear Other field
+                    communityCbs.forEach(cb => {
+                        if (cb !== communitiesNone) {
+                            cb.checked = false;
+                            cb.closest('.option-item').classList.remove('selected');
+                        }
+                    });
+                    communitiesOtherField.classList.remove('visible');
+                    clearFieldInputs(communitiesOtherField);
+                }
+            });
+
+            communityCbs.forEach(cb => {
+                if (cb === communitiesNone) return;
+                cb.addEventListener('change', function() {
+                    if (this.checked && communitiesNone.checked) {
+                        communitiesNone.checked = false;
+                        communitiesNone.closest('.option-item').classList.remove('selected');
+                    }
+                });
+            });
+
+            // Handle useCase "Just explore" mutual exclusion
+            const useCaseExplore = document.getElementById('useCaseExploreCheckbox');
+            const useCaseCbs = document.querySelectorAll('input[name="useCase"]');
+
+            useCaseExplore.addEventListener('change', function() {
+                if (this.checked) {
+                    useCaseCbs.forEach(cb => {
+                        if (cb !== useCaseExplore) {
+                            cb.checked = false;
+                            cb.closest('.option-item').classList.remove('selected');
+                        }
+                    });
+                }
+            });
+
+            useCaseCbs.forEach(cb => {
+                if (cb === useCaseExplore) return;
+                cb.addEventListener('change', function() {
+                    if (this.checked && useCaseExplore.checked) {
+                        useCaseExplore.checked = false;
+                        useCaseExplore.closest('.option-item').classList.remove('selected');
+                    }
+                });
+            });
+
             // Handle share willing conditional logic (show share type when Yes)
             const shareTypeField = document.getElementById('shareTypeField');
             document.querySelectorAll('input[name="shareWilling"]').forEach(radio => {
                 radio.addEventListener('change', function() {
-                    shareTypeField.classList.toggle('visible', this.value === 'yes');
+                    const show = this.value === 'yes';
+                    shareTypeField.classList.toggle('visible', show);
+                    if (!show) clearFieldInputs(shareTypeField);
                 });
             });
 
@@ -1182,6 +1281,8 @@
                     } else {
                         robotTypeField.classList.remove('visible');
                         robotBrandField.classList.remove('visible');
+                        clearFieldInputs(robotTypeField);
+                        clearFieldInputs(robotBrandField);
                     }
                 });
             });
@@ -1212,26 +1313,56 @@
             const SUPABASE_URL = 'https://fycshjlwrwwdbxwjnoqi.supabase.co';
             const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ5Y3Noamx3cnd3ZGJ4d2pub3FpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA2MDk5NzUsImV4cCI6MjA4NjE4NTk3NX0.fBI8QSGxejlvuCXLQroX1H0J9RqH6tapNep84mfrx_s';
 
-            // Custom validation for checkbox groups (at least 1 required)
+            // Custom validation for checkbox groups (HTML5 can't validate "at least one checked")
             function validateCheckboxGroups() {
                 const missing = [];
 
                 if (!document.querySelector('input[name="useCase"]:checked'))
-                    missing.push('What do you want to do with RLDX');
+                    missing.push({
+                        label: 'What do you want to do with RLDX',
+                        el: document.querySelector('input[name="useCase"]').closest('.form-group')
+                    });
                 if (!document.querySelector('input[name="applications"]:checked'))
-                    missing.push('Tasks you are interested in');
+                    missing.push({
+                        label: 'Tasks you are interested in',
+                        el: document.querySelector('input[name="applications"]').closest('.form-group')
+                    });
 
                 return missing;
             }
+
+            // Rate limit: track last submission time
+            let lastSubmitTime = 0;
 
             // Handle form submission
             form.addEventListener('submit', async function(e) {
                 e.preventDefault();
 
-                // Validate checkbox groups
+                // Honeypot check — if filled, silently fake success
+                if (form.querySelector('input[name="website"]').value) {
+                    form.style.display = 'none';
+                    successMessage.classList.add('visible');
+                    return;
+                }
+
+                // Rate limit: minimum 3 seconds between submissions
+                const now = Date.now();
+                if (now - lastSubmitTime < 3000) {
+                    alert('Please wait a moment before submitting again.');
+                    return;
+                }
+                lastSubmitTime = now;
+
+                // Validate checkbox groups (radios are handled by HTML5 required)
                 const missingFields = validateCheckboxGroups();
                 if (missingFields.length > 0) {
-                    alert('Please select at least one option for:\n\n• ' + missingFields.join('\n• '));
+                    alert('Please select at least one option for:\n\n• ' + missingFields.map(f => f.label).join('\n• '));
+
+                    // Scroll to first missing field
+                    const firstEl = missingFields[0].el;
+                    const headerH = document.querySelector('.header').offsetHeight;
+                    const top = firstEl.getBoundingClientRect().top + window.pageYOffset - headerH - 20;
+                    window.scrollTo({ top, behavior: 'smooth' });
                     return;
                 }
 
@@ -1241,8 +1372,9 @@
                 submitBtn.disabled = true;
                 submitBtn.textContent = 'Submitting...';
 
-                // Collect form data
+                // Collect form data (exclude honeypot)
                 const formData = new FormData(form);
+                formData.delete('website');
                 const data = {};
 
                 formData.forEach((value, key) => {
@@ -1277,19 +1409,15 @@
                         })
                     });
 
-                    if (response.ok) {
-                        // Update hero subtitle for success state
+                    if (response.ok || response.status === 409) {
+                        // Show success for both new and duplicate signups
+                        // (prevents email enumeration)
                         document.querySelector('.hero-subtitle').textContent =
                             'General-purpose dexterity, purpose-built. RLDX is coming for the real world.';
 
-                        // Show success message
                         form.style.display = 'none';
                         successMessage.classList.add('visible');
                         window.scrollTo({ top: 0, behavior: 'smooth' });
-                    } else if (response.status === 409) {
-                        alert('This email is already on the waitlist!');
-                        submitBtn.disabled = false;
-                        submitBtn.textContent = originalText;
                     } else {
                         throw new Error(`Server error: ${response.status}`);
                     }
