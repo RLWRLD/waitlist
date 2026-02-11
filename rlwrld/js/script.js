@@ -8,6 +8,7 @@
 // ==========================================
 function updateProgressBar() {
     const progressBar = document.getElementById('progressBar');
+    if (!progressBar) return;
 
     // Calculate scroll progress
     const windowHeight = window.innerHeight;
@@ -124,16 +125,18 @@ function initScrollAnimations() {
 // ==========================================
 function initHeaderShadow() {
     const header = document.querySelector('.header');
+    if (!header) return;
 
+    let hasShadow = false;
     function updateHeaderShadow() {
-        if (window.scrollY > 10) {
-            header.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.1)';
-        } else {
-            header.style.boxShadow = 'none';
+        const shouldHave = window.scrollY > 10;
+        if (shouldHave !== hasShadow) {
+            header.style.boxShadow = shouldHave ? '0 2px 8px rgba(0, 0, 0, 0.1)' : 'none';
+            hasShadow = shouldHave;
         }
     }
 
-    window.addEventListener('scroll', updateHeaderShadow, { passive: true });
+    window.addEventListener('scroll', throttle(updateHeaderShadow, 100), { passive: true });
 }
 
 // ==========================================
@@ -157,7 +160,7 @@ function initCodeCopy() {
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            transition: var(--transition);
+            transition: background-color 0.15s ease;
         `;
 
         const pre = block.parentElement;

@@ -39,7 +39,7 @@
     --header-height: 70px;
 
     /* Transitions */
-    --transition: all 0.3s ease;
+    --transition-speed: 0.15s ease;
 }
 
 /* ==========================================
@@ -106,8 +106,7 @@ strong {
 .header {
     position: sticky;
     top: 0;
-    background-color: rgba(10, 10, 10, 0.95);
-    backdrop-filter: blur(10px);
+    background-color: rgba(10, 10, 10, 0.98);
     border-bottom: 1px solid var(--border-color);
     z-index: 1000;
     height: var(--header-height);
@@ -124,11 +123,13 @@ strong {
 .logo-img {
     height: 36px;
     width: auto;
-    transition: var(--transition);
+    transition: opacity var(--transition-speed);
 }
 
-.logo-img:hover {
-    opacity: 0.8;
+@media (hover: hover) {
+    .logo-img:hover {
+        opacity: 0.8;
+    }
 }
 
 /* ==========================================
@@ -234,14 +235,16 @@ strong {
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    transition: var(--transition);
+    transition: background-color var(--transition-speed), transform var(--transition-speed), box-shadow var(--transition-speed);
     text-align: center;
 }
 
-.btn:hover {
-    background-color: var(--primary-text);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(80, 234, 206, 0.3);
+@media (hover: hover) {
+    .btn:hover {
+        background-color: var(--primary-text);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(80, 234, 206, 0.3);
+    }
 }
 
 .btn-large {
@@ -274,7 +277,7 @@ strong {
     color: var(--text-primary);
     font-size: var(--font-size-base);
     font-family: var(--font-family);
-    transition: var(--transition);
+    transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
 }
 
 .form-input:focus,
@@ -282,6 +285,24 @@ strong {
     outline: none;
     border-color: var(--primary-color);
     box-shadow: 0 0 0 3px rgba(80, 234, 206, 0.1);
+}
+
+/* Override browser autofill background on dark theme */
+.form-input:-webkit-autofill,
+.form-input:-webkit-autofill:hover,
+.form-select:-webkit-autofill,
+.form-select:-webkit-autofill:hover {
+    -webkit-box-shadow: 0 0 0 1000px var(--background) inset;
+    -webkit-text-fill-color: var(--text-primary);
+    caret-color: var(--text-primary);
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+.form-input:-webkit-autofill:focus,
+.form-select:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px var(--background) inset, 0 0 0 3px rgba(80, 234, 206, 0.1);
+    -webkit-text-fill-color: var(--text-primary);
+    caret-color: var(--text-primary);
 }
 
 /* ==========================================

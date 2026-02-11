@@ -8,8 +8,12 @@
     <link rel="stylesheet" href="rlwrld/css/styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap"></noscript>
     <style>
+        /* Override smooth scroll — not needed on form page */
+        html { scroll-behavior: auto; }
+
         /* Compact Waitlist Form Styles */
         .waitlist-hero {
             padding: 2rem 0 1rem;
@@ -103,12 +107,13 @@
             border: 1px solid var(--border-color);
             border-radius: 6px;
             cursor: pointer;
-            transition: var(--transition);
         }
 
-        .option-item:hover {
-            border-color: var(--primary-color);
-            background: rgba(80, 234, 206, 0.05);
+        @media (hover: hover) {
+            .option-item:hover {
+                border-color: var(--primary-color);
+                background: rgba(80, 234, 206, 0.05);
+            }
         }
 
         .option-item.selected {
@@ -127,7 +132,6 @@
             background: transparent;
             cursor: pointer;
             flex-shrink: 0;
-            transition: var(--transition);
         }
 
         .option-item input[type="checkbox"] {
@@ -301,6 +305,24 @@
             font-size: 1.25rem;
         }
 
+        /* Validation Errors */
+        .form-group.has-error .form-input,
+        .form-group.has-error .form-select {
+            border-color: #e05252;
+            box-shadow: 0 0 0 3px rgba(224, 82, 82, 0.15);
+        }
+
+        .form-group.has-error .option-item {
+            border-color: rgba(224, 82, 82, 0.4);
+        }
+
+        .error-message {
+            display: block;
+            color: #e05252;
+            font-size: 0.75rem;
+            margin-top: 0.35rem;
+        }
+
         /* Form Container - Compact */
         .waitlist-form-container {
             max-width: 600px;
@@ -423,9 +445,6 @@
     </style>
 </head>
 <body>
-    <!-- Reading Progress Bar -->
-    <div class="progress-bar" id="progressBar"></div>
-
     <!-- Header - Logo Only (Standalone) -->
     <header class="header standalone-header">
         <div class="container">
@@ -464,7 +483,7 @@
             <!-- Waitlist Form -->
             <div class="container">
                 <div class="waitlist-form-container">
-                    <form id="waitlistForm">
+                    <form id="waitlistForm" novalidate autocomplete="off">
 
                         <!-- Section 1: Contact -->
                         <div class="form-section">
@@ -551,7 +570,7 @@
                                     </label>
                                 </div>
                                 <div class="conditional-field" id="affiliationOtherField" style="margin-top: 0.75rem; margin-left: 0; padding-left: 0; border-left: none;">
-                                    <input type="text" name="affiliationOther" class="form-input" placeholder="Please specify">
+                                    <input type="text" name="affiliationOther" class="form-input" placeholder="Please specify *">
                                 </div>
                             </div>
 
@@ -669,7 +688,7 @@
                                     </label>
                                 </div>
                                 <div class="conditional-field" id="startupRoleOtherField" style="margin-top: 0.75rem; margin-left: 0; padding-left: 0; border-left: none;">
-                                    <input type="text" name="startupRoleOther" class="form-input" placeholder="Please specify">
+                                    <input type="text" name="startupRoleOther" class="form-input" placeholder="Please specify *">
                                 </div>
                             </div>
 
@@ -1059,7 +1078,7 @@
                                     </label>
                                 </div>
                                 <div class="conditional-field" id="referralSourceOtherField" style="margin-top: 0.75rem; margin-left: 0; padding-left: 0; border-left: none;">
-                                    <input type="text" name="referralSourceOther" class="form-input" placeholder="Please specify">
+                                    <input type="text" name="referralSourceOther" class="form-input" placeholder="Please specify *">
                                 </div>
                             </div>
                         </div>
@@ -1103,9 +1122,9 @@
                     <img src="rlwrld/assets/logos/RLWRLD-compact-logo-white.svg" alt="RLWRLD" class="footer-logo-img">
                 </div>
                 <div style="display: flex; gap: 1.5rem; margin: 1rem 0; justify-content: center;">
-                    <a href="https://x.com/RLWRLD_ai" target="_blank" style="color: var(--text-secondary); transition: var(--transition);">X (Twitter)</a>
-                    <a href="https://www.linkedin.com/company/rlwrld/" target="_blank" style="color: var(--text-secondary); transition: var(--transition);">LinkedIn</a>
-                    <a href="https://www.youtube.com/@rlwrld.dexterity" target="_blank" style="color: var(--text-secondary); transition: var(--transition);">YouTube</a>
+                    <a href="https://x.com/RLWRLD_ai" target="_blank" style="color: var(--text-secondary); transition: color 0.15s ease;">X (Twitter)</a>
+                    <a href="https://www.linkedin.com/company/rlwrld/" target="_blank" style="color: var(--text-secondary); transition: color 0.15s ease;">LinkedIn</a>
+                    <a href="https://www.youtube.com/@rlwrld.dexterity" target="_blank" style="color: var(--text-secondary); transition: color 0.15s ease;">YouTube</a>
                 </div>
                 <p class="footer-text">&copy; 2026 RLWRLD Inc. All rights reserved.</p>
             </div>
@@ -1313,23 +1332,133 @@
             const SUPABASE_URL = 'https://fycshjlwrwwdbxwjnoqi.supabase.co';
             const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ5Y3Noamx3cnd3ZGJ4d2pub3FpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA2MDk5NzUsImV4cCI6MjA4NjE4NTk3NX0.fBI8QSGxejlvuCXLQroX1H0J9RqH6tapNep84mfrx_s';
 
-            // Custom validation for checkbox groups (HTML5 can't validate "at least one checked")
-            function validateCheckboxGroups() {
-                const missing = [];
-
-                if (!document.querySelector('input[name="useCase"]:checked'))
-                    missing.push({
-                        label: 'What do you want to do with RLDX',
-                        el: document.querySelector('input[name="useCase"]').closest('.form-group')
-                    });
-                if (!document.querySelector('input[name="applications"]:checked'))
-                    missing.push({
-                        label: 'Tasks you are interested in',
-                        el: document.querySelector('input[name="applications"]').closest('.form-group')
-                    });
-
-                return missing;
+            // ============================================
+            // Form Validation (replaces browser native)
+            // ============================================
+            function isFieldVisible(el) {
+                // Walk up the DOM — if any ancestor has .conditional-field without .visible, it's hidden
+                let node = el.closest('.conditional-field');
+                while (node) {
+                    if (!node.classList.contains('visible')) return false;
+                    node = node.parentElement.closest('.conditional-field');
+                }
+                return true;
             }
+
+            function validateAll() {
+                const errors = [];
+
+                // A. Required text inputs
+                [
+                    { id: 'fullName', label: 'Full Name' },
+                    { id: 'email', label: 'Email' },
+                    { id: 'organization', label: 'Organization' }
+                ].forEach(f => {
+                    const input = document.getElementById(f.id);
+                    if (!input.value.trim()) {
+                        errors.push({ el: input, group: input.closest('.form-group'), msg: `${f.label} is required` });
+                    }
+                });
+
+                // B. Email format (only if non-empty)
+                const emailInput = document.getElementById('email');
+                if (emailInput.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim())) {
+                    // Remove duplicate "required" error if already added
+                    const idx = errors.findIndex(e => e.el === emailInput);
+                    if (idx !== -1) errors.splice(idx, 1);
+                    errors.push({ el: emailInput, group: emailInput.closest('.form-group'), msg: 'Please enter a valid email address' });
+                }
+
+                // C. Required select
+                const country = document.getElementById('country');
+                if (!country.value) {
+                    errors.push({ el: country, group: country.closest('.form-group'), msg: 'Please select a country' });
+                }
+
+                // D. Required radio groups (skip hidden conditional fields)
+                [
+                    { name: 'affiliation', label: 'Affiliation' },
+                    { name: 'academicRole', label: 'Role' },
+                    { name: 'industryRole', label: 'Role' },
+                    { name: 'startupRole', label: 'Role' },
+                    { name: 'robotAccess', label: 'Robot access' },
+                    { name: 'simAccess', label: 'Simulation environment' },
+                    { name: 'shareWilling', label: 'Sharing willingness' },
+                    { name: 'eventAttendance', label: 'Launch event attendance' },
+                    { name: 'referralSource', label: 'How you heard about us' }
+                ].forEach(g => {
+                    const first = document.querySelector(`input[name="${g.name}"]`);
+                    if (!first) return;
+                    if (!isFieldVisible(first)) return;
+                    if (!document.querySelector(`input[name="${g.name}"]:checked`)) {
+                        errors.push({ el: first, group: first.closest('.form-group'), msg: `Please select an option for ${g.label}` });
+                    }
+                });
+
+                // E. Required checkbox groups
+                [
+                    { name: 'useCase', label: 'What you want to do with RLDX' },
+                    { name: 'applications', label: 'Tasks you are interested in' }
+                ].forEach(g => {
+                    if (!document.querySelector(`input[name="${g.name}"]:checked`)) {
+                        const first = document.querySelector(`input[name="${g.name}"]`);
+                        errors.push({ el: first, group: first.closest('.form-group'), msg: `Please select at least one option for ${g.label}` });
+                    }
+                });
+
+                // F. Conditional "Other" specify fields (required when visible)
+                form.querySelectorAll('.conditional-field.visible input[required]').forEach(input => {
+                    if (!input.value.trim()) {
+                        errors.push({ el: input, group: input.closest('.conditional-field'), msg: 'Please specify' });
+                    }
+                });
+
+                return errors;
+            }
+
+            function clearAllErrors() {
+                form.querySelectorAll('.has-error').forEach(el => el.classList.remove('has-error'));
+                form.querySelectorAll('.error-message').forEach(el => el.remove());
+            }
+
+            function showErrors(errors) {
+                errors.forEach(err => {
+                    if (err.group && !err.group.querySelector('.error-message')) {
+                        err.group.classList.add('has-error');
+                        const span = document.createElement('span');
+                        span.className = 'error-message';
+                        span.setAttribute('role', 'alert');
+                        span.textContent = err.msg;
+                        err.group.appendChild(span);
+                    }
+                });
+
+                // Scroll to first error
+                if (errors.length > 0) {
+                    const target = errors[0].group || errors[0].el;
+                    const headerH = document.querySelector('.header')?.offsetHeight || 0;
+                    const top = target.getBoundingClientRect().top + window.pageYOffset - headerH - 20;
+                    window.scrollTo({ top, behavior: 'smooth' });
+                }
+            }
+
+            // Auto-clear error when user interacts with a field
+            form.addEventListener('input', function(e) {
+                const group = e.target.closest('.form-group') || e.target.closest('.conditional-field');
+                if (group && group.classList.contains('has-error')) {
+                    group.classList.remove('has-error');
+                    const msg = group.querySelector('.error-message');
+                    if (msg) msg.remove();
+                }
+            });
+            form.addEventListener('change', function(e) {
+                const group = e.target.closest('.form-group') || e.target.closest('.conditional-field');
+                if (group && group.classList.contains('has-error')) {
+                    group.classList.remove('has-error');
+                    const msg = group.querySelector('.error-message');
+                    if (msg) msg.remove();
+                }
+            });
 
             // Rate limit: track last submission time
             let lastSubmitTime = 0;
@@ -1353,16 +1482,11 @@
                 }
                 lastSubmitTime = now;
 
-                // Validate checkbox groups (radios are handled by HTML5 required)
-                const missingFields = validateCheckboxGroups();
-                if (missingFields.length > 0) {
-                    alert('Please select at least one option for:\n\n• ' + missingFields.map(f => f.label).join('\n• '));
-
-                    // Scroll to first missing field
-                    const firstEl = missingFields[0].el;
-                    const headerH = document.querySelector('.header').offsetHeight;
-                    const top = firstEl.getBoundingClientRect().top + window.pageYOffset - headerH - 20;
-                    window.scrollTo({ top, behavior: 'smooth' });
+                // Full form validation
+                clearAllErrors();
+                const errors = validateAll();
+                if (errors.length > 0) {
+                    showErrors(errors);
                     return;
                 }
 
