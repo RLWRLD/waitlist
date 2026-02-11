@@ -1333,6 +1333,13 @@
             const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ5Y3Noamx3cnd3ZGJ4d2pub3FpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA2MDk5NzUsImV4cCI6MjA4NjE4NTk3NX0.fBI8QSGxejlvuCXLQroX1H0J9RqH6tapNep84mfrx_s';
 
             // ============================================
+            // Constants
+            // ============================================
+            const RATE_LIMIT_MS = 3000;
+            const HEADER_OFFSET_PX = 20;
+            const HTTP_CONFLICT = 409;
+
+            // ============================================
             // Form Validation (replaces browser native)
             // ============================================
             function isFieldVisible(el) {
@@ -1345,10 +1352,7 @@
                 return true;
             }
 
-            function validateAll() {
-                const errors = [];
-
-                // A. Required text inputs
+            function validateTextInputs(errors) {
                 [
                     { id: 'fullName', label: 'Full Name' },
                     { id: 'email', label: 'Email' },
@@ -1360,22 +1364,22 @@
                     }
                 });
 
-                // B. Email format (only if non-empty)
+                // Email format (only if non-empty)
                 const emailInput = document.getElementById('email');
                 if (emailInput.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim())) {
-                    // Remove duplicate "required" error if already added
                     const idx = errors.findIndex(e => e.el === emailInput);
                     if (idx !== -1) errors.splice(idx, 1);
                     errors.push({ el: emailInput, group: emailInput.closest('.form-group'), msg: 'Please enter a valid email address' });
                 }
 
-                // C. Required select
+                // Required select
                 const country = document.getElementById('country');
                 if (!country.value) {
                     errors.push({ el: country, group: country.closest('.form-group'), msg: 'Please select a country' });
                 }
+            }
 
-                // D. Required radio groups (skip hidden conditional fields)
+            function validateRadioGroups(errors) {
                 [
                     { name: 'affiliation', label: 'Affiliation' },
                     { name: 'academicRole', label: 'Role' },
@@ -1394,8 +1398,9 @@
                         errors.push({ el: first, group: first.closest('.form-group'), msg: `Please select an option for ${g.label}` });
                     }
                 });
+            }
 
-                // E. Required checkbox groups
+            function validateCheckboxGroups(errors) {
                 [
                     { name: 'useCase', label: 'What you want to do with RLDX' },
                     { name: 'applications', label: 'Tasks you are interested in' }
@@ -1405,14 +1410,22 @@
                         errors.push({ el: first, group: first.closest('.form-group'), msg: `Please select at least one option for ${g.label}` });
                     }
                 });
+            }
 
-                // F. Conditional "Other" specify fields (required when visible)
+            function validateConditionalFields(errors) {
                 form.querySelectorAll('.conditional-field.visible input[required]').forEach(input => {
                     if (!input.value.trim()) {
                         errors.push({ el: input, group: input.closest('.conditional-field'), msg: 'Please specify' });
                     }
                 });
+            }
 
+            function validateAll() {
+                const errors = [];
+                validateTextInputs(errors);
+                validateRadioGroups(errors);
+                validateCheckboxGroups(errors);
+                validateConditionalFields(errors);
                 return errors;
             }
 
@@ -1437,7 +1450,7 @@
                 if (errors.length > 0) {
                     const target = errors[0].group || errors[0].el;
                     const headerH = document.querySelector('.header')?.offsetHeight || 0;
-                    const top = target.getBoundingClientRect().top + window.pageYOffset - headerH - 20;
+                    const top = target.getBoundingClientRect().top + window.pageYOffset - headerH - HEADER_OFFSET_PX;
                     window.scrollTo({ top, behavior: 'smooth' });
                 }
             }
@@ -1476,7 +1489,7 @@
 
                 // Rate limit: minimum 3 seconds between submissions
                 const now = Date.now();
-                if (now - lastSubmitTime < 3000) {
+                if (now - lastSubmitTime < RATE_LIMIT_MS) {
                     alert('Please wait a moment before submitting again.');
                     return;
                 }
@@ -1533,7 +1546,7 @@
                         })
                     });
 
-                    if (response.ok || response.status === 409) {
+                    if (response.ok || response.status === HTTP_CONFLICT) {
                         // Show success for both new and duplicate signups
                         // (prevents email enumeration)
                         document.querySelector('.hero-subtitle').textContent =

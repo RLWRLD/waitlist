@@ -27,6 +27,13 @@ const CONFIG = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 const DRY_RUN = process.argv.includes('--dry-run');
 
 // ============================================
+// Constants
+// ============================================
+const NOTION_PAGE_SIZE = 100;
+const NOTION_RATE_LIMIT_DELAY = 350;
+const PREVIEW_WIDTH = 56;
+
+// ============================================
 // Label Maps — code → human-readable
 // ============================================
 const LABELS = {
@@ -214,7 +221,7 @@ async function getExistingEmails() {
   let cursor = undefined;
 
   while (true) {
-    const body = { page_size: 100 };
+    const body = { page_size: NOTION_PAGE_SIZE };
     if (cursor) body.start_cursor = cursor;
 
     const res = await fetch(
@@ -295,11 +302,8 @@ function buildProperties(row) {
 // Transform — Supabase row → Notion page content
 // ============================================
 
-function buildPageContent(row) {
-  const fd = row.form_data || {};
+function buildContactSection(row, fd) {
   const blocks = [];
-
-  // --- Contact ---
   blocks.push(heading2('Contact'));
   blocks.push(bullet(labelValue('Email', row.email || fd.email)));
   blocks.push(bullet(labelValue('Organization', row.organization || fd.organization)));
@@ -308,10 +312,11 @@ function buildPageContent(row) {
   if (social) {
     blocks.push(bullet(labelValue('Social', social)));
   }
+  return blocks;
+}
 
-  blocks.push(divider());
-
-  // --- Background ---
+function buildBackgroundSection(fd) {
+  const blocks = [];
   blocks.push(heading2('Background'));
   let affText = label(LABELS.affiliation, fd.affiliation);
   if (fd.affiliation === 'other' && fd.affiliationOther) {
@@ -324,7 +329,6 @@ function buildPageContent(row) {
     blocks.push(bullet(labelValue('Role', role)));
   }
 
-  // Industries (conditional — only for industry affiliation)
   if (fd.affiliation === 'industry') {
     const industries = labelArray(LABELS.industry, fd.industry);
     if (fd.industryOther) industries.push(fd.industryOther);
@@ -333,20 +337,19 @@ function buildPageContent(row) {
     }
   }
 
-  // Communities
   const communities = labelArray(LABELS.communities, fd.communities);
   if (fd.communitiesOther) communities.push(fd.communitiesOther);
   if (communities.length > 0) {
     blocks.push(bullet(labelValue('Communities', communities.join(', '))));
   }
+  return blocks;
+}
 
-  blocks.push(divider());
-
-  // --- Hardware ---
+function buildHardwareSection(fd) {
+  const blocks = [];
   blocks.push(heading2('Hardware'));
   blocks.push(bullet(labelValue('Robot Access', label(LABELS.robotAccess, fd.robotAccess))));
 
-  // Robot types/brands (conditional — only if has robot)
   const hasRobot = ['own', 'lab', 'planning'].includes(fd.robotAccess);
   if (hasRobot) {
     const types = labelArray(LABELS.robotType, fd.robotType);
@@ -363,10 +366,11 @@ function buildPageContent(row) {
   }
 
   blocks.push(bullet(labelValue('Simulation', label(LABELS.simAccess, fd.simAccess))));
+  return blocks;
+}
 
-  blocks.push(divider());
-
-  // --- Interest ---
+function buildInterestSection(fd) {
+  const blocks = [];
   blocks.push(heading2('Interest'));
   const useCases = labelArray(LABELS.useCase, fd.useCase);
   blocks.push(bullet(labelValue('Use Cases', useCases.join(', ') || '—')));
@@ -383,10 +387,11 @@ function buildPageContent(row) {
     }
   }
   blocks.push(bullet(labelValue('Share', shareText)));
+  return blocks;
+}
 
-  blocks.push(divider());
-
-  // --- Engagement ---
+function buildEngagementSection(fd) {
+  const blocks = [];
   blocks.push(heading2('Engagement'));
   blocks.push(bullet(labelValue('Event', label(LABELS.eventAttendance, fd.eventAttendance))));
 
@@ -395,8 +400,22 @@ function buildPageContent(row) {
     referralText = `Other: ${fd.referralSourceOther}`;
   }
   blocks.push(bullet(labelValue('Referral', referralText)));
-
   return blocks;
+}
+
+function buildPageContent(row) {
+  const fd = row.form_data || {};
+  return [
+    ...buildContactSection(row, fd),
+    divider(),
+    ...buildBackgroundSection(fd),
+    divider(),
+    ...buildHardwareSection(fd),
+    divider(),
+    ...buildInterestSection(fd),
+    divider(),
+    ...buildEngagementSection(fd),
+  ];
 }
 
 // ============================================
@@ -463,7 +482,7 @@ function printPreview(row) {
   const communities = labelArray(LABELS.communities, fd.communities);
   if (fd.communitiesOther) communities.push(fd.communitiesOther);
 
-  const w = 56;
+  const w = PREVIEW_WIDTH;
   const line = '─'.repeat(w);
   const pad = (s) => s + ' '.repeat(Math.max(0, w - 2 - s.length));
 
@@ -544,7 +563,7 @@ async function main() {
       created++;
 
       // Small delay to respect Notion rate limits (3 req/sec)
-      await new Promise(resolve => setTimeout(resolve, 350));
+      await new Promise(resolve => setTimeout(resolve, NOTION_RATE_LIMIT_DELAY));
     } catch (err) {
       console.error(`  ✗ Failed: ${name} (${email}) — ${err.message}`);
       failed++;
