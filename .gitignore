@@ -32,5 +32,10 @@ Temporary Items
 # Playwright
 .playwright-mcp/
 
+# QA test artifacts
+QA/tests/node_modules/
+QA/tests/test-results/
+QA/logs/
+
 # Sync config (contains secret keys)
-sync-config.json
+sync/sync-config.json
