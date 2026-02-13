@@ -87,20 +87,6 @@ strong {
 }
 
 /* ==========================================
-   Reading Progress Bar
-   ========================================== */
-.progress-bar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 0%;
-    height: 4px;
-    background: linear-gradient(90deg, var(--primary-color), var(--primary-text));
-    z-index: 9999;
-    transition: width 0.1s ease;
-}
-
-/* ==========================================
    Header
    ========================================== */
 .header {
@@ -376,8 +362,7 @@ strong {
    ========================================== */
 @media print {
     .header,
-    .footer,
-    .progress-bar {
+    .footer {
         display: none;
     }
 
