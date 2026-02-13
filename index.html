@@ -107,6 +107,7 @@
             border: 1px solid var(--border-color);
             border-radius: 6px;
             cursor: pointer;
+            touch-action: manipulation;
         }
 
         @media (hover: hover) {
@@ -116,7 +117,7 @@
             }
         }
 
-        .option-item.selected {
+        .option-item:has(input:checked) {
             border-color: var(--primary-color);
             background: rgba(80, 234, 206, 0.1);
         }
@@ -132,6 +133,7 @@
             background: transparent;
             cursor: pointer;
             flex-shrink: 0;
+            touch-action: manipulation;
         }
 
         .option-item input[type="checkbox"] {
@@ -1131,7 +1133,6 @@
         </div>
     </footer>
 
-    <script src="rlwrld/js/script.js"></script>
     <script>
         // Waitlist Form Logic
         document.addEventListener('DOMContentLoaded', function() {
@@ -1142,7 +1143,6 @@
             function clearFieldInputs(container) {
                 container.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(input => {
                     input.checked = false;
-                    input.closest('.option-item')?.classList.remove('selected');
                 });
                 container.querySelectorAll('input[type="text"], input[type="url"]').forEach(input => {
                     input.value = '';
@@ -1236,7 +1236,6 @@
                     communityCbs.forEach(cb => {
                         if (cb !== communitiesNone) {
                             cb.checked = false;
-                            cb.closest('.option-item').classList.remove('selected');
                         }
                     });
                     communitiesOtherField.classList.remove('visible');
@@ -1249,7 +1248,6 @@
                 cb.addEventListener('change', function() {
                     if (this.checked && communitiesNone.checked) {
                         communitiesNone.checked = false;
-                        communitiesNone.closest('.option-item').classList.remove('selected');
                     }
                 });
             });
@@ -1263,7 +1261,6 @@
                     useCaseCbs.forEach(cb => {
                         if (cb !== useCaseExplore) {
                             cb.checked = false;
-                            cb.closest('.option-item').classList.remove('selected');
                         }
                     });
                 }
@@ -1274,7 +1271,6 @@
                 cb.addEventListener('change', function() {
                     if (this.checked && useCaseExplore.checked) {
                         useCaseExplore.checked = false;
-                        useCaseExplore.closest('.option-item').classList.remove('selected');
                     }
                 });
             });
@@ -1302,26 +1298,6 @@
                         robotBrandField.classList.remove('visible');
                         clearFieldInputs(robotTypeField);
                         clearFieldInputs(robotBrandField);
-                    }
-                });
-            });
-
-            // Handle option item selection styling
-            document.querySelectorAll('.option-item input').forEach(input => {
-                input.addEventListener('change', function() {
-                    // For radio buttons, remove selected from siblings
-                    if (this.type === 'radio') {
-                        const name = this.name;
-                        document.querySelectorAll(`input[name="${name}"]`).forEach(sibling => {
-                            sibling.closest('.option-item').classList.remove('selected');
-                        });
-                    }
-
-                    // Toggle selected class
-                    if (this.checked) {
-                        this.closest('.option-item').classList.add('selected');
-                    } else {
-                        this.closest('.option-item').classList.remove('selected');
                     }
                 });
             });
