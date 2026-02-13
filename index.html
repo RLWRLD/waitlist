@@ -444,6 +444,47 @@
                 padding: 0.75rem;
             }
         }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(1rem);
+            background: #1a1a1a;
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.75rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            max-width: calc(100vw - 2rem);
+            text-align: center;
+        }
+
+        .toast-visible {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .toast-warning {
+            border-color: #d4a017;
+        }
+
+        .toast-error {
+            border-color: #e05252;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .toast {
+                transition: opacity 0.1s ease;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
     </style>
 </head>
 <body>
@@ -1099,7 +1140,7 @@
                     </form>
 
                     <!-- Success Message -->
-                    <div class="success-message" id="successMessage">
+                    <div class="success-message" id="successMessage" role="status">
                         <div class="success-icon">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                                 <polyline points="20 6 9 17 4 12"></polyline>
@@ -1133,7 +1174,20 @@
         </div>
     </footer>
 
+    <div id="toast" class="toast" role="alert" aria-live="polite"></div>
+
     <script>
+        // Toast notification (replaces alert())
+        function showToast(message, type) {
+            var toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast toast-' + type + ' toast-visible';
+            clearTimeout(toast._timer);
+            toast._timer = setTimeout(function() {
+                toast.classList.remove('toast-visible');
+            }, 3000);
+        }
+
         // Waitlist Form Logic
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('waitlistForm');
@@ -1303,6 +1357,20 @@
             });
 
             // ============================================
+            // Accessibility: sync aria-hidden on conditional fields
+            // ============================================
+            form.querySelectorAll('.conditional-field').forEach(function(field) {
+                field.setAttribute('aria-hidden', String(!field.classList.contains('visible')));
+            });
+            new MutationObserver(function(mutations) {
+                mutations.forEach(function(m) {
+                    if (m.target.classList.contains('conditional-field')) {
+                        m.target.setAttribute('aria-hidden', String(!m.target.classList.contains('visible')));
+                    }
+                });
+            }).observe(form, { attributes: true, subtree: true, attributeFilter: ['class'] });
+
+            // ============================================
             // Supabase Configuration
             // ============================================
             const SUPABASE_URL = 'https://fycshjlwrwwdbxwjnoqi.supabase.co';
@@ -1312,6 +1380,7 @@
             // Constants
             // ============================================
             const RATE_LIMIT_MS = 3000;
+            const FETCH_TIMEOUT_MS = 10000;
             const HEADER_OFFSET_PX = 20;
             const HTTP_CONFLICT = 409;
 
@@ -1422,12 +1491,13 @@
                     }
                 });
 
-                // Scroll to first error
+                // Scroll to first error and focus it
                 if (errors.length > 0) {
                     const target = errors[0].group || errors[0].el;
                     const headerH = document.querySelector('.header')?.offsetHeight || 0;
                     const top = target.getBoundingClientRect().top + window.pageYOffset - headerH - HEADER_OFFSET_PX;
                     window.scrollTo({ top, behavior: 'smooth' });
+                    setTimeout(function() { errors[0].el.focus({ preventScroll: true }); }, 300);
                 }
             }
 
@@ -1449,6 +1519,14 @@
                 }
             });
 
+            // Track form modification for beforeunload warning
+            let formModified = false;
+            form.addEventListener('input', function() { formModified = true; }, true);
+            form.addEventListener('change', function() { formModified = true; }, true);
+            window.addEventListener('beforeunload', function(e) {
+                if (formModified) e.preventDefault();
+            });
+
             // Rate limit: track last submission time
             let lastSubmitTime = 0;
 
@@ -1458,6 +1536,7 @@
 
                 // Honeypot check — if filled, silently fake success
                 if (form.querySelector('input[name="website"]').value) {
+                    formModified = false;
                     form.style.display = 'none';
                     successMessage.classList.add('visible');
                     return;
@@ -1466,7 +1545,7 @@
                 // Rate limit: minimum 3 seconds between submissions
                 const now = Date.now();
                 if (now - lastSubmitTime < RATE_LIMIT_MS) {
-                    alert('Please wait a moment before submitting again.');
+                    showToast('Please wait a moment before submitting again.', 'warning');
                     return;
                 }
                 lastSubmitTime = now;
@@ -1502,6 +1581,9 @@
                     }
                 });
 
+                const controller = new AbortController();
+                const timeoutId = setTimeout(function() { controller.abort(); }, FETCH_TIMEOUT_MS);
+
                 try {
                     // Send to Supabase
                     const response = await fetch(`${SUPABASE_URL}/rest/v1/waitlist`, {
@@ -1519,12 +1601,15 @@
                             country: data.country,
                             social_profile: data.socialProfile || null,
                             form_data: data
-                        })
+                        }),
+                        signal: controller.signal
                     });
+                    clearTimeout(timeoutId);
 
                     if (response.ok || response.status === HTTP_CONFLICT) {
                         // Show success for both new and duplicate signups
                         // (prevents email enumeration)
+                        formModified = false;
                         document.querySelector('.hero-subtitle').textContent =
                             'General-purpose dexterity, purpose-built. RLDX is coming for the real world.';
 
@@ -1535,11 +1620,64 @@
                         throw new Error(`Server error: ${response.status}`);
                     }
                 } catch (error) {
+                    clearTimeout(timeoutId);
                     console.error('Submission failed:', error);
-                    alert('Something went wrong. Please try again.');
+                    if (error.name === 'AbortError') {
+                        showToast('Connection timed out. Please check your network and try again.', 'error');
+                    } else {
+                        showToast('Something went wrong. Please try again.', 'error');
+                    }
                     submitBtn.disabled = false;
                     submitBtn.textContent = originalText;
                 }
+            });
+        });
+
+        // bfcache restoration: sync conditional-field visibility with actual form state
+        window.addEventListener('pageshow', function(e) {
+            if (!e.persisted) return;
+            var form = document.getElementById('waitlistForm');
+            if (!form || form.style.display === 'none') return;
+
+            // Affiliation conditional fields
+            var aff = form.querySelector('input[name="affiliation"]:checked');
+            var affVal = aff ? aff.value : null;
+            document.getElementById('academicRoleField').classList.toggle('visible', affVal === 'academic');
+            document.getElementById('industryRoleField').classList.toggle('visible', affVal === 'industry');
+            document.getElementById('industryField').classList.toggle('visible', affVal === 'industry');
+            document.getElementById('startupRoleField').classList.toggle('visible', affVal === 'startup');
+            document.getElementById('affiliationOtherField').classList.toggle('visible', affVal === 'other');
+
+            // Nested: startupRole Other
+            if (affVal === 'startup') {
+                var sr = form.querySelector('input[name="startupRole"]:checked');
+                document.getElementById('startupRoleOtherField').classList.toggle('visible', sr && sr.value === 'other');
+            }
+
+            // Robot access conditional fields
+            var robot = form.querySelector('input[name="robotAccess"]:checked');
+            var hasRobot = robot && (robot.value === 'own' || robot.value === 'lab' || robot.value === 'planning');
+            document.getElementById('robotTypeField').classList.toggle('visible', hasRobot);
+            document.getElementById('robotBrandField').classList.toggle('visible', hasRobot);
+
+            // Share willing conditional field
+            var share = form.querySelector('input[name="shareWilling"]:checked');
+            document.getElementById('shareTypeField').classList.toggle('visible', share && share.value === 'yes');
+
+            // Referral source Other
+            var ref = form.querySelector('input[name="referralSource"]:checked');
+            document.getElementById('referralSourceOtherField').classList.toggle('visible', ref && ref.value === 'other');
+
+            // Checkbox Other fields
+            ['communitiesOtherCheckbox:communitiesOtherField',
+             'industryOtherCheckbox:industryOtherField',
+             'robotTypeOtherCheckbox:robotTypeOtherField',
+             'robotBrandOtherCheckbox:robotBrandOtherField',
+             'applicationsOtherCheckbox:applicationsOtherField'].forEach(function(pair) {
+                var parts = pair.split(':');
+                var cb = document.getElementById(parts[0]);
+                var field = document.getElementById(parts[1]);
+                if (cb && field) field.classList.toggle('visible', cb.checked);
             });
         });
     </script>
