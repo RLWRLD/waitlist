@@ -58,7 +58,7 @@ test.describe('1. Page Load & Initialization', () => {
 
   test.skip('INIT-02: Font loading timing is browser-specific', () => {});
 
-  test.skip('INIT-03: Requires JS disabled browser', () => {});
+  // INIT-03: Moved to previously-skipped.spec.js (now automated)
 
   test('INIT-04: Fresh page load — all resources loaded, form renders correctly', async ({ page }) => {
     await goToForm(page);
@@ -98,7 +98,7 @@ test.describe('1. Page Load & Initialization', () => {
 test.describe('2. Browser Navigation', () => {
   test.skip('NAV-01: Requires multi-page navigation', () => {});
 
-  test.skip('NAV-02: bfcache behavior is browser-specific', () => {});
+  // NAV-02: Moved to previously-skipped.spec.js (now automated)
 
   test('NAV-03: Success state — reload — form restored to initial state', async ({ page }) => {
     const captured = setupSupabaseIntercept(page);
@@ -130,7 +130,7 @@ test.describe('2. Browser Navigation', () => {
     }
   });
 
-  test.skip('NAV-05: bfcache behavior', () => {});
+  // NAV-05: Moved to previously-skipped.spec.js (now automated)
 
   test('NAV-06: No history.pushState used — form works on a single URL', async ({ page }) => {
     await goToForm(page);
@@ -505,7 +505,7 @@ test.describe('5. Scroll Behavior', () => {
     expect(scrollY).toBe(0);
   });
 
-  test.skip('SCR-03: User interruption during smooth scroll is browser-specific', () => {});
+  // SCR-03: Moved to previously-skipped.spec.js (now automated)
 
   test('SCR-04: Header offset in scroll calculation — error element is visible after scroll', async ({ page }) => {
     await goToForm(page);
@@ -555,7 +555,7 @@ test.describe('5. Scroll Behavior', () => {
 
   test.skip('SCR-07: Mobile virtual keyboard — requires real device', () => {});
 
-  test.skip('SCR-08: prefers-reduced-motion scroll behavior', () => {});
+  // SCR-08: Moved to previously-skipped.spec.js (now automated)
 });
 
 // ============================================
@@ -740,7 +740,7 @@ test.describe('7. Success State', () => {
     expect(successDisplay).toBe('none');
   });
 
-  test.skip('SUC-04: Back button behavior varies', () => {});
+  // SUC-04: Moved to previously-skipped.spec.js (now automated)
 
   test('SUC-05: Footer links work after success (target="_blank")', async ({ page }) => {
     const captured = setupSupabaseIntercept(page);
@@ -962,7 +962,7 @@ test.describe('8. Error State & Recovery', () => {
     expect(heightAfter).toBeGreaterThan(heightBefore);
   });
 
-  test.skip('ERR-08: Scroll position after error removal', () => {});
+  // ERR-08: Moved to previously-skipped.spec.js (now automated)
 
   test('ERR-09: Error group lookup — form-group vs conditional-field (closest)', async ({ page }) => {
     await goToForm(page);
@@ -1185,7 +1185,7 @@ test.describe('9. Network & Server Response', () => {
     expect(captured2.requests.length).toBe(1);
   });
 
-  test.skip('NET-16: Page leave during fetch', () => {});
+  // NET-16: Moved to previously-skipped.spec.js (now automated)
 });
 
 // ============================================
@@ -1204,7 +1204,7 @@ test.describe('10. Keyboard Navigation', () => {
     expect(focusedId).toBe('email');
   });
 
-  test.skip('KEY-02: Shift+Tab is just reverse, hard to test precisely', () => {});
+  // KEY-02: Moved to previously-skipped.spec.js (now automated)
 
   test('KEY-03: Honeypot field has tabindex="-1" (not in tab order)', async ({ page }) => {
     await goToForm(page);
@@ -1261,7 +1261,7 @@ test.describe('10. Keyboard Navigation', () => {
     expect(isUnchecked).toBe(false);
   });
 
-  test.skip('KEY-07: Dropdown keyboard is browser-specific', () => {});
+  // KEY-07: Moved to previously-skipped.spec.js (now automated)
 
   test('KEY-08: After success, tab does not reach form elements (form display:none)', async ({ page }) => {
     const captured = setupSupabaseIntercept(page);
@@ -1577,9 +1577,8 @@ test.describe('13. Concurrency & Timing', () => {
     expect(text).toBe('Please wait a moment before submitting again.');
   });
 
-  test.skip('CON-05: Multi-tab cannot be tested in single Playwright context', () => {});
-  test.skip('CON-06: Same as CON-05', () => {});
-  test.skip('CON-07: Timer ordering', () => {});
+  // CON-05, CON-06: Moved to previously-skipped.spec.js (now automated)
+  // CON-07: Moved to previously-skipped.spec.js (now automated)
 });
 
 // ============================================
@@ -1667,7 +1666,7 @@ test.describe('15. Copy/Paste', () => {
     expect(value).toBeTruthy();
   });
 
-  test.skip('CPY-04: Drag and drop — browser-specific', () => {});
+  // CPY-04: Removed (drag-and-drop not relevant for this form)
 
   test('CPY-05: Paste very long text (5000 chars) — accepted (no length limit)', async ({ page }) => {
     await goToForm(page);
@@ -1894,8 +1893,7 @@ test.describe('17. External Links', () => {
 // 18. Page Lifecycle
 // ============================================
 test.describe('18. Page Lifecycle', () => {
-  test.skip('LFC-01: Background tab timer throttling', () => {});
-  test.skip('LFC-02: Tab switch', () => {});
+  // LFC-01, LFC-02: Moved to previously-skipped.spec.js (now automated)
   test.skip('LFC-03: Screen lock', () => {});
   test.skip('LFC-04: App switch', () => {});
   test.skip('LFC-05: Fetch during background', () => {});
