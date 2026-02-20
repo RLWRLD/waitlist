@@ -74,10 +74,10 @@ cp sync-config.example.json sync-config.json
 
 ```bash
 # 동기화 실행
-node sync-notion.js
+node sync/sync-notion.js
 
 # 미리보기 (Notion에 실제로 추가하지 않음)
-node sync-notion.js --dry-run
+node sync/sync-notion.js --dry-run
 ```
 
 Node.js 18+ 필요 (외부 패키지 불필요).
