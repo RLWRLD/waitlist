@@ -107,8 +107,8 @@ const LABELS = {
     testimonial: 'Testimonial at launch event',
   },
   eventAttendance: {
-    us_inperson: 'In person (US) - May 2026 (Tentative)', kr_inperson: 'In person (Korea) - June 2026 (Tentative)',
-    jp_inperson: 'In person (Japan) - May 2026 (Tentative)', virtual: 'Virtual',
+    us_inperson: 'In person (San Francisco, US) - Q2 2026', kr_inperson: 'In person (Seoul, Korea) - Q2 2026',
+    jp_inperson: 'In person (Tokyo, Japan) - Q2 2026', virtual: 'Virtual',
     maybe: 'Maybe', no: 'No',
   },
   referralSource: {
