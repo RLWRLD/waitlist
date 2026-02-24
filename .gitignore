@@ -39,3 +39,6 @@ QA/logs/
 
 # Sync config (contains secret keys)
 sync/sync-config.json
+
+# Sync logs
+sync/logs/
