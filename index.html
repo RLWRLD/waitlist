@@ -892,30 +892,20 @@
                                 <label class="form-label">Do you have access to a simulation environment? *</label>
                                 <div class="option-group">
                                     <label class="option-item">
-                                        <input type="radio" name="simAccess" value="rtx4080_plus" required>
-                                        <div class="option-content">
-                                            <div class="option-label">Yes, RTX 4080 or higher (16GB+ VRAM)</div>
-                                            <div class="option-description">Recommended for Isaac Lab Arena evaluation</div>
-                                        </div>
-                                    </label>
-                                    <label class="option-item">
-                                        <input type="radio" name="simAccess" value="rtx4070">
-                                        <div class="option-content">
-                                            <div class="option-label">Yes, RTX 4070 or similar (12-16GB VRAM)</div>
-                                            <div class="option-description">Basic simulation capable</div>
-                                        </div>
-                                    </label>
-                                    <label class="option-item">
-                                        <input type="radio" name="simAccess" value="lower">
-                                        <span class="option-label">Yes, but lower-end GPU</span>
+                                        <input type="radio" name="simAccess" value="rtx4090_plus" required>
+                                        <span class="option-label">Yes, RTX 4090 or higher (24GB+ VRAM)</span>
                                     </label>
                                     <label class="option-item">
                                         <input type="radio" name="simAccess" value="cloud">
-                                        <span class="option-label">No local GPU / Cloud only</span>
+                                        <span class="option-label">No local GPU / Cloud GPU (L40S or equivalent)</span>
+                                    </label>
+                                    <label class="option-item">
+                                        <input type="radio" name="simAccess" value="planning">
+                                        <span class="option-label">Not yet, but planning to set up</span>
                                     </label>
                                     <label class="option-item">
                                         <input type="radio" name="simAccess" value="no">
-                                        <span class="option-label">No access to simulation</span>
+                                        <span class="option-label">No access</span>
                                     </label>
                                 </div>
                             </div>
@@ -1129,7 +1119,6 @@
                         <!-- Submit -->
                         <div class="submit-section">
                             <button type="submit" class="btn btn-large" style="min-width: 200px;">Join Launch List</button>
-                            <p class="submit-note">We'll notify you when RLDX is ready for early access.</p>
                         </div>
                     </form>
 

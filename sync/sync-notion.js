@@ -86,8 +86,8 @@ const LABELS = {
     custom: 'Custom-built', other: 'Other',
   },
   simAccess: {
-    rtx4080_plus: 'RTX 4080+ (16GB+)', rtx4070: 'RTX 4070 (12-16GB)',
-    lower: 'Lower-end GPU', cloud: 'Cloud only', no: 'No access',
+    rtx4090_plus: 'RTX 4090+ (24GB+)', cloud: 'Cloud GPU (L40S or equivalent)',
+    planning: 'Planning to set up', no: 'No access',
   },
   useCase: {
     benchmark: 'Benchmark', finetune: 'Fine-tune', integrate: 'Integrate',
