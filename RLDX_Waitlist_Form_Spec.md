@@ -1,8 +1,8 @@
-RLDX Early Access Waitlist — Google Form Specification
+RLDX Launch List — Form Specification
 
-Form Title: RLDX Early Access Waitlist
-Form Description: Sign up for early access to RLDX — Vision-Language-Action models designed for real-world dexterous manipulation. Launching March 2026.
-Confirmation message after submission: "You're on the list! Thank you for signing up for RLDX Early Access. We'll be in touch when it's your turn."
+Form Title: RLDX Launch List
+Form Description: Sign up for the RLDX Launch List — Vision-Language-Action models designed for real-world dexterous manipulation.
+Confirmation message after submission: "You're on the list! Thank you for joining the RLDX Launch List. We'll be in touch when it's your turn."
 
 IMPORTANT RULES:
 - Do NOT shuffle any answer options. Keep the exact order listed below.
@@ -52,7 +52,7 @@ Q8. Which communities are you part of?
 Type: Checkboxes
 Required: No
 Description: Select all that apply.
-Options: OpenArm, LeRobot, Hugging Face Robotics, ROS Community, Physical AI Discord / Twitter
+Options: OpenArm, LeRobot, Hugging Face Robotics, ROS Community, Physical AI Discord / Twitter, None
 Other: Yes (enable built-in Other with text input)
 
 Q9. Do you have access to a robot?
@@ -77,7 +77,7 @@ Other: Yes (enable built-in Other with text input)
 Q12. Do you have access to a simulation environment?
 Type: Multiple choice
 Required: Yes
-Options: Yes RTX 4080 or higher (16GB+ VRAM) — Recommended for Isaac Lab Arena evaluation, Yes RTX 4070 or similar (12-16GB VRAM) — Basic simulation capable, Yes but lower-end GPU, No local GPU / Cloud only, No access to simulation
+Options: Yes RTX 4090 or higher (24GB+ VRAM), No local GPU / Cloud GPU (L40S or equivalent), Not yet but planning to set up, No access
 
 Q13. What do you want to do with RLDX?
 Type: Checkboxes
@@ -106,7 +106,7 @@ Options: Create content (video / blog / social media), Give a testimonial at RLD
 Q17. Would you attend an RLDX launch event?
 Type: Multiple choice
 Required: Yes
-Options: Yes in person (US) - May 2026 (Tentative), Yes in person (Japan) - May 2026 (Tentative), Yes in person (Korea) - June 2026 (Tentative), Yes virtually, Maybe, No
+Options: Yes in person (San Francisco, US) - Q2 2026, Yes in person (Tokyo, Japan) - Q2 2026, Yes in person (Seoul, Korea) - Q2 2026, Yes virtually, Maybe, No
 
 Q18. How did you hear about RLDX?
 Type: Multiple choice

@@ -1,23 +1,29 @@
 # RLDX Waitlist
 
-RLDX Early Access 대기자 등록 페이지 + Notion 동기화 스크립트.
+RLDX Launch List 등록 페이지 + Notion 동기화 + 일일 백업 스크립트.
 
 ## 구조
 
 ```
 waitlist/
-├── index.html                  # Waitlist 폼 (HTML/CSS/JS + Supabase)
+├── index.html                      # Launch List 폼 (HTML/CSS/JS + Supabase)
 ├── rlwrld/
-│   ├── css/styles.css          # 공통 스타일
-│   ├── js/script.js            # 공통 JS (progress bar, scroll 등)
-│   └── assets/logos/           # 로고 SVG
-├── sync-notion.js              # Supabase → Notion 동기화 스크립트
-├── sync-config.json            # API 키 설정 (gitignored)
-├── sync-config.example.json    # 설정 파일 템플릿
-└── SUPABASE_SETUP.md           # Supabase 테이블/RLS 설정 가이드
+│   ├── css/styles.css              # 공통 스타일
+│   ├── js/script.js                # 공통 JS (progress bar, scroll 등)
+│   └── assets/logos/               # 로고 SVG
+├── sync/
+│   ├── sync-notion.js              # Supabase → Notion 동기화 (cron 5분)
+│   ├── backup-supabase.js          # Supabase 일일 백업 (cron 매일)
+│   ├── sync-config.json            # API 키 설정 (gitignored)
+│   ├── sync-config.example.json    # 설정 파일 템플릿
+│   ├── backups/                    # 일일 백업 저장 디렉토리
+│   ├── logs/                       # 싱크/백업 로그
+│   └── DATA_PIPELINE.md            # 데이터 파이프라인 상세 문서
+├── SUPABASE_SETUP.md               # Supabase 테이블/RLS 설정 가이드
+└── RLDX_Waitlist_Form_Spec.md      # 폼 스펙 문서
 ```
 
-## Waitlist 폼
+## Launch List 폼
 
 `index.html`을 웹서버로 서빙하면 됨. 제출된 데이터는 Supabase `waitlist` 테이블에 저장.
 
@@ -38,20 +44,21 @@ python3 -m http.server 8080
 
 Supabase에 저장된 waitlist 데이터를 Notion 데이터베이스로 동기화.
 
+- index.html을 자동 파싱하여 라벨/섹션 구조 추출 (하드코딩 매핑 없음)
 - 코드값을 사람이 읽을 수 있는 라벨로 변환 (예: `rd` → `R&D / Research`)
-- 조건부 필드는 해당하는 것만 표시 (예: Academic이면 Industry 필드 제외)
-- 각 entry마다 Notion 페이지에 5개 섹션으로 구조화된 프로필 생성
+- 섹션별로 질문:답변 형태의 병합 텍스트 생성
 - email 기준 중복 방지
+- Notion DB에 섹션 컬럼이 없으면 자동 생성
 
 ### 설정
 
-1. `sync-config.example.json`을 `sync-config.json`으로 복사:
+1. `sync/sync-config.example.json`을 `sync/sync-config.json`으로 복사:
 
 ```bash
-cp sync-config.example.json sync-config.json
+cp sync/sync-config.example.json sync/sync-config.json
 ```
 
-2. `sync-config.json`에 실제 키 입력:
+2. `sync/sync-config.json`에 실제 키 입력:
 
 ```json
 {
@@ -84,22 +91,38 @@ Node.js 18+ 필요 (외부 패키지 불필요).
 
 ### Notion 데이터베이스 구조
 
-| Property | Type | 용도 |
-|---|---|---|
-| Name | Title | 이름 |
-| Email | Email | 이메일 |
-| Organization | Text | 소속 |
-| Country | Select | 국가 |
-| Affiliation | Select | 소속 유형 (Academic, Startup 등) |
-| Role | Text | 역할 (affiliation에 따라 다름) |
-| Robot Access | Select | 로봇 보유 여부 |
-| Sim Access | Select | 시뮬레이션 환경 |
-| Use Cases | Multi-select | RLDX 사용 목적 |
-| Applications | Multi-select | 관심 태스크 |
-| Event | Select | 런칭 이벤트 참석 |
-| Referral | Select | 유입 경로 |
-| Share Willing | Select | 경험 공유 의향 |
-| Social Profile | URL | X/LinkedIn |
-| Submitted | Date | 제출일 |
+#### Profile columns (개별)
 
-각 row를 클릭하면 상세 프로필 (Contact, Background, Hardware, Interest, Engagement) 확인 가능.
+| Column | Type | Source |
+|---|---|---|
+| Supabase ID | Title (메인) | `id` (serial) |
+| Full Name | Rich text | `full_name` |
+| Email | Email | `email` |
+| Organization / Company | Rich text | `organization` |
+| Country | Select | `country` → 텍스트 변환 |
+| X or LinkedIn Profile | URL | `social_profile` |
+| Submitted | Date | `created_at` |
+
+#### Section columns (병합 텍스트)
+
+| Column | 포함 필드 |
+|---|---|
+| Who You Are | affiliation, academicRole, industryRole, industry, startupRole, communities + Other fields |
+| Robot & Hardware | robotAccess, robotType, robotBrand, simAccess + Other fields |
+| Interest in RLDX | useCase, applications, shareWilling, shareType + Other fields |
+| Event & Engagement | eventAttendance, referralSource + Other fields |
+
+### Cron 설정
+
+```crontab
+# Notion sync every 5 minutes
+*/5 * * * * /usr/bin/node /home/rlwrld/projects/waitlist/sync/sync-notion.js >> /home/rlwrld/projects/waitlist/sync/logs/sync.log 2>&1
+
+# Daily backup at KST 00:00 (UTC 15:00)
+0 15 * * * /usr/bin/node /home/rlwrld/projects/waitlist/sync/backup-supabase.js >> /home/rlwrld/projects/waitlist/sync/logs/backup.log 2>&1
+```
+
+## 일일 백업
+
+`sync/backup-supabase.js`가 Supabase 전체 데이터를 `sync/backups/YYYY-MM-DD/waitlist.json`에 저장.
+백업 후 자동으로 git commit + push.

@@ -4,7 +4,7 @@
 
 ## Overview
 
-- **목적**: RLDX Early Access 웨이트리스트 폼 데이터 저장
+- **목적**: RLDX Launch List 폼 데이터 저장
 - **구조**: 핵심 필드는 개별 컬럼 + 전체 폼 응답은 JSONB
 - **보안**: INSERT만 허용 (RLS)
 - **프론트엔드**: 순수 JS, Supabase REST API 직접 호출 (SDK 불필요)
