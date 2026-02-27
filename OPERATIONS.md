@@ -56,28 +56,14 @@
 
 ### 초기 세팅 (프로젝트 새로 만들 때)
 
-[SUPABASE_SETUP.md](SUPABASE_SETUP.md) 참고. 추가로 아래 SQL 실행 필요:
+[SUPABASE_SETUP.md](SUPABASE_SETUP.md) Step 2의 SQL을 한 블록으로 실행하면 테이블, RLS, RPC 함수가 모두 생성됩니다.
 
-```sql
--- 이메일 발송 추적 컬럼
-ALTER TABLE public.waitlist
-ADD COLUMN IF NOT EXISTS confirmation_sent_at timestamptz DEFAULT NULL;
+### 폼 제출 방식
 
--- 이메일 로그 테이블
-CREATE TABLE IF NOT EXISTS public.email_logs (
-    id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    waitlist_id bigint NOT NULL REFERENCES public.waitlist(id) ON DELETE CASCADE,
-    email text NOT NULL,
-    status text NOT NULL DEFAULT 'pending',
-    resend_id text,
-    error_message text,
-    created_at timestamptz DEFAULT now(),
-    sent_at timestamptz
-);
-ALTER TABLE public.email_logs ENABLE ROW LEVEL SECURITY;
-CREATE INDEX IF NOT EXISTS idx_email_logs_waitlist_id ON public.email_logs(waitlist_id);
-CREATE INDEX IF NOT EXISTS idx_email_logs_status ON public.email_logs(status);
-```
+프론트엔드는 `/rest/v1/rpc/waitlist_signup` RPC 함수를 호출합니다 (직접 테이블 INSERT가 아님).
+- 새 이메일 → INSERT (Webhook 트리거 → 이메일 발송)
+- 기존 이메일 → UPDATE (하위 정보만 갱신, 이메일 안 감)
+- `id`, `created_at`, `confirmation_sent_at`은 절대 변경되지 않음
 
 ---
 
