@@ -1,11 +1,15 @@
-import "@supabase/functions-js/edge-runtime.d.ts";
-import { createClient } from "@supabase/supabase-js";
+import "jsr:@supabase/functions-js/edge-runtime.d.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY")!;
-const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
-const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
+const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 
-// Sender config — update after domain verification (Step 2/3)
+if (!RESEND_API_KEY || !SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
+  throw new Error("Missing required environment variables: RESEND_API_KEY, SUPABASE_URL, or SUPABASE_SERVICE_ROLE_KEY");
+}
+
+// Sender config — update after domain verification
 const FROM_EMAIL = "RLDX by RLWRLD <launch@rlwrld.ai>";
 const REPLY_TO = "do-not-reply@rlwrld.ai";
 
@@ -250,18 +254,50 @@ For inquiries, visit https://rlwrld.ai`;
 }
 
 Deno.serve(async (req) => {
-  // Webhook payload from Supabase Database Webhook
-  const payload = await req.json();
-  const record: WaitlistRecord = payload.record;
-
-  if (!record || !record.email) {
+  // Only accept POST requests
+  if (req.method !== "POST") {
     return new Response(
-      JSON.stringify({ error: "No record or email in payload" }),
+      JSON.stringify({ error: "Method not allowed" }),
+      { status: 405, headers: { "Content-Type": "application/json" } },
+    );
+  }
+
+  // Parse payload safely
+  let payload;
+  try {
+    payload = await req.json();
+  } catch {
+    return new Response(
+      JSON.stringify({ error: "Invalid JSON payload" }),
+      { status: 400, headers: { "Content-Type": "application/json" } },
+    );
+  }
+
+  const record: WaitlistRecord | undefined = payload.record;
+
+  if (!record || !record.email || !record.id) {
+    return new Response(
+      JSON.stringify({ error: "No record, email, or id in payload" }),
       { status: 400, headers: { "Content-Type": "application/json" } },
     );
   }
 
   const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+
+  // Idempotency check: skip if already sent
+  const { data: existing } = await supabase
+    .from("waitlist")
+    .select("confirmation_sent_at")
+    .eq("id", record.id)
+    .single();
+
+  if (existing?.confirmation_sent_at) {
+    console.log(`Skipping: email already sent for waitlist #${record.id}`);
+    return new Response(
+      JSON.stringify({ skipped: true, reason: "already sent" }),
+      { status: 200, headers: { "Content-Type": "application/json" } },
+    );
+  }
 
   const name = record.full_name || "there";
   const subject = `Welcome to RLDX, ${name} — You're #${record.id}`;
@@ -288,12 +324,13 @@ Deno.serve(async (req) => {
 
     if (!resendRes.ok) {
       // Log failure
-      await supabase.from("email_logs").insert({
+      const { error: logError } = await supabase.from("email_logs").insert({
         waitlist_id: record.id,
         email: record.email,
         status: "failed",
         error_message: JSON.stringify(resendData),
       });
+      if (logError) console.error("Failed to log email error:", logError);
 
       console.error("Resend API error:", resendData);
       return new Response(
@@ -305,7 +342,7 @@ Deno.serve(async (req) => {
     // 2. Log success & update waitlist
     const now = new Date().toISOString();
 
-    await Promise.all([
+    const [logResult, updateResult] = await Promise.all([
       supabase.from("email_logs").insert({
         waitlist_id: record.id,
         email: record.email,
@@ -319,6 +356,9 @@ Deno.serve(async (req) => {
         .eq("id", record.id),
     ]);
 
+    if (logResult.error) console.error("Failed to insert email_log:", logResult.error);
+    if (updateResult.error) console.error("Failed to update confirmation_sent_at:", updateResult.error);
+
     console.log(`Confirmation email sent to ${record.email} (Resend ID: ${resendData.id})`);
 
     return new Response(
@@ -326,15 +366,17 @@ Deno.serve(async (req) => {
       { status: 200, headers: { "Content-Type": "application/json" } },
     );
   } catch (err) {
-    // Unexpected error
-    await supabase.from("email_logs").insert({
+    console.error("Unexpected error:", err);
+
+    // Safe error logging — record is validated above so this is safe
+    const { error: logError } = await supabase.from("email_logs").insert({
       waitlist_id: record.id,
       email: record.email,
       status: "failed",
       error_message: err instanceof Error ? err.message : String(err),
     });
+    if (logError) console.error("Failed to log error:", logError);
 
-    console.error("Unexpected error:", err);
     return new Response(
       JSON.stringify({ error: "Internal error" }),
       { status: 500, headers: { "Content-Type": "application/json" } },
