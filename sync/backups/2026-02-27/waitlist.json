@@ -1,0 +1,161 @@
+{
+  "meta": {
+    "date": "2026-02-27",
+    "timestamp": "2026-02-27T06:00:02.901Z",
+    "totalRows": 3
+  },
+  "rows": [
+    {
+      "id": 1,
+      "created_at": "2026-02-27T01:07:08.805284+00:00",
+      "email": "choihongmin@keonhwa.com",
+      "full_name": "Choi Hongmin",
+      "organization": "Keonhwa Corporation",
+      "country": "KR",
+      "social_profile": "https://www.linkedin.com/in/choihongmin/",
+      "form_data": {
+        "email": "choihongmin@keonhwa.com",
+        "country": "KR",
+        "useCase": [
+          "finetune",
+          "deploy",
+          "prototype"
+        ],
+        "fullName": "Choi Hongmin",
+        "industry": "manufacturing",
+        "shareType": "testimonial",
+        "simAccess": "no",
+        "affiliation": "industry",
+        "communities": "none",
+        "robotAccess": "interested",
+        "applications": [
+          "bin_picking",
+          "assembly",
+          "packaging",
+          "tool_use",
+          "handover",
+          "cable",
+          "cloth",
+          "cleaning"
+        ],
+        "industryRole": "operations",
+        "organization": "Keonhwa Corporation",
+        "shareWilling": "yes",
+        "industryOther": "",
+        "socialProfile": "https://www.linkedin.com/in/choihongmin/",
+        "referralSource": "word_of_mouth",
+        "robotTypeOther": "",
+        "eventAttendance": "kr_inperson",
+        "robotBrandOther": "",
+        "affiliationOther": "",
+        "communitiesOther": "",
+        "startupRoleOther": "",
+        "applicationsOther": "",
+        "referralSourceOther": ""
+      }
+    },
+    {
+      "id": 2,
+      "created_at": "2026-02-27T01:38:07.651297+00:00",
+      "email": "tedkim@caring.co.kr",
+      "full_name": "Taesung Kim",
+      "organization": "caring",
+      "country": "KR",
+      "social_profile": null,
+      "form_data": {
+        "email": "tedkim@caring.co.kr",
+        "country": "KR",
+        "useCase": [
+          "benchmark",
+          "integrate",
+          "prototype"
+        ],
+        "fullName": "Taesung Kim",
+        "robotType": "humanoid",
+        "simAccess": "rtx4090_plus",
+        "robotBrand": "unitree",
+        "affiliation": "startup",
+        "communities": [
+          "lerobot",
+          "huggingface"
+        ],
+        "robotAccess": "own",
+        "startupRole": "founder",
+        "applications": [
+          "assembly",
+          "cloth",
+          "cleaning"
+        ],
+        "organization": "caring",
+        "shareWilling": "maybe",
+        "industryOther": "",
+        "socialProfile": "",
+        "referralSource": "news",
+        "robotTypeOther": "",
+        "eventAttendance": "kr_inperson",
+        "robotBrandOther": "",
+        "affiliationOther": "",
+        "communitiesOther": "",
+        "startupRoleOther": "",
+        "applicationsOther": "",
+        "referralSourceOther": ""
+      }
+    },
+    {
+      "id": 3,
+      "created_at": "2026-02-27T03:59:55.883809+00:00",
+      "email": "hsshin42@kaist.ac.kr",
+      "full_name": "Hyosup Shin",
+      "organization": "NMAIL, KAIST",
+      "country": "KR",
+      "social_profile": "www.linkedin.com/in/hsshin42",
+      "form_data": {
+        "email": "hsshin42@kaist.ac.kr",
+        "country": "KR",
+        "useCase": [
+          "benchmark",
+          "finetune",
+          "integrate",
+          "hobby"
+        ],
+        "fullName": "Hyosup Shin",
+        "robotType": [
+          "bimanual",
+          "single_arm",
+          "dexterous_hand"
+        ],
+        "simAccess": "rtx4090_plus",
+        "robotBrand": [
+          "custom",
+          "other"
+        ],
+        "affiliation": "academic",
+        "communities": [
+          "huggingface",
+          "ros"
+        ],
+        "robotAccess": "own",
+        "academicRole": "student",
+        "applications": [
+          "assembly",
+          "tool_use",
+          "cable",
+          "other"
+        ],
+        "organization": "NMAIL, KAIST",
+        "shareWilling": "maybe",
+        "industryOther": "",
+        "socialProfile": "www.linkedin.com/in/hsshin42",
+        "referralSource": "social",
+        "robotTypeOther": "",
+        "eventAttendance": "kr_inperson",
+        "robotBrandOther": "",
+        "affiliationOther": "",
+        "communitiesOther": "",
+        "startupRoleOther": "",
+        "applicationsOther": "",
+        "referralSourceOther": ""
+      }
+    }
+  ]
+}
