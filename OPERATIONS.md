@@ -283,6 +283,224 @@ tail -20 sync/logs/backup.log
 
 ---
 
+## 8. 데이터 파이프라인
+
+### 전체 흐름
+
+```
+[User submits form]
+       │
+       ▼
+┌─────────────┐     FormData API (auto-collect all inputs)
+│  index.html │────────────────────────────────────────────┐
+└─────────────┘                                            │
+                                                           ▼
+                                              ┌────────────────────┐
+                                              │      Supabase      │
+                                              │  waitlist table     │
+                                              │                    │
+                                              │  - email           │
+                                              │  - full_name       │
+                                              │  - organization    │
+                                              │  - country         │
+                                              │  - social_profile  │
+                                              │  - form_data (JSONB)│
+                                              │  - created_at      │
+                                              └────────┬───────────┘
+                                                       │
+                              ┌─────────────────────────┤
+                              │                         │
+                         cron 5min                 cron daily
+                              │                         │
+                              ▼                         ▼
+                    ┌──────────────────┐     ┌──────────────────┐
+                    │  sync-notion.js  │     │ backup-supabase.js│
+                    │                  │     │                  │
+                    │  Reads index.html│     │  JSON backup to  │
+                    │  at runtime for  │     │  sync/backups/   │
+                    │  auto label/     │     │  + git commit    │
+                    │  section extract │     │  + git push      │
+                    └────────┬─────────┘     └──────────────────┘
+                             │
+                             ▼
+                    ┌──────────────────┐
+                    │  Notion Database │
+                    │                  │
+                    │  Profile columns │
+                    │  + 4 section     │
+                    │    columns       │
+                    └──────────────────┘
+```
+
+### 폼 데이터 저장 규칙
+
+- **Radio inputs**: 하나만 선택 → `string` (e.g., `"academic"`)
+- **Checkbox inputs**: 하나 선택 → `string`, 여러 개 → `array` (e.g., `["franka", "ur"]`)
+- **Text inputs**: 항상 포함, 비어있으면 `""` (빈 문자열)
+- **Conditional fields**: radio/checkbox가 미선택이면 key 자체가 없음, text input은 빈 문자열로 존재
+
+핵심 5개 필드(`email`, `full_name`, `organization`, `country`, `social_profile`)는 개별 컬럼으로 추출 저장하고, 전체 응답은 `form_data` JSONB에 보관합니다.
+
+### Notion 동기화 메커니즘
+
+sync-notion.js는 실행 시마다 index.html을 파싱하여 **하드코딩 없이** 아래 정보를 자동 추출합니다:
+
+1. **LABELS** — 옵션 코드 → 텍스트 매핑 (`<input value="...">` + `<span class="option-label">`)
+2. **SECTIONS** — 섹션 구조 + 질문 텍스트 (`<div class="form-section">` + `<h3 class="section-title">` + `<label class="form-label">`)
+3. **SELECT options** — `<select>` 내 `<option value="...">` 텍스트
+
+동기화 로직:
+1. Supabase에서 전체 row를 가져옴
+2. Notion DB에 섹션 컬럼이 없으면 자동 생성 (PATCH API)
+3. Notion DB에서 이미 싱크된 email 목록을 조회
+4. 새 row만 필터링하여 Notion 페이지 생성
+5. 중복 email은 skip (email 기준 비교)
+
+### 필드 매핑 레퍼런스
+
+#### Who You Are
+
+| Question | form_data Key | Type |
+|---|---|---|
+| What type of organization are you from? | `affiliation` | radio |
+| (Other text) | `affiliationOther` | text |
+| What is your role? (Academic) | `academicRole` | radio |
+| What is your role? (Industry) | `industryRole` | radio |
+| Which industry? | `industry` | checkbox (array) |
+| (Other text) | `industryOther` | text |
+| What is your role? (Startup) | `startupRole` | radio |
+| (Other text) | `startupRoleOther` | text |
+| Which communities are you part of? | `communities` | checkbox (array) |
+| (Other text) | `communitiesOther` | text |
+
+#### Robot & Hardware
+
+| Question | form_data Key | Type |
+|---|---|---|
+| Do you have access to a robot? | `robotAccess` | radio |
+| Robot Type(s) | `robotType` | checkbox (array) |
+| (Other text) | `robotTypeOther` | text |
+| Robot Brand(s) | `robotBrand` | checkbox (array) |
+| (Other text) | `robotBrandOther` | text |
+| Do you have access to a simulation environment? | `simAccess` | radio |
+
+#### Interest in RLDX
+
+| Question | form_data Key | Type |
+|---|---|---|
+| What do you want to do with RLDX? | `useCase` | checkbox (array) |
+| What tasks are you interested in? | `applications` | checkbox (array) |
+| (Other text) | `applicationsOther` | text |
+| Would you share your experience publicly? | `shareWilling` | radio |
+| How would you like to share? | `shareType` | checkbox (array) |
+
+#### Event & Engagement
+
+| Question | form_data Key | Type |
+|---|---|---|
+| Would you attend an RLDX launch event? | `eventAttendance` | radio |
+| How did you hear about RLDX? | `referralSource` | radio |
+| (Other text) | `referralSourceOther` | text |
+
+---
+
+## 9. index.html 수정 시 영향 범위
+
+| 변경 사항 | Supabase | Notion Sync | Backup | 추가 작업 |
+|---|---|---|---|---|
+| 옵션 텍스트 변경 | O (key로 저장) | O (자동 반영) | O | 없음 |
+| 옵션 value(key) 변경 | O (새 key 수집) | △ (기존 데이터 key fallback) | O | **SQL 마이그레이션** |
+| 새 옵션 추가 | O (FormData 수집) | O (LABELS 추출) | O | 없음 |
+| 옵션 삭제 | O | △ (기존 데이터 key fallback) | O | 없음 |
+| 새 질문 추가 (기존 섹션) | O (FormData 수집) | O (SECTIONS 추출) | O | 없음 |
+| 질문 삭제 | O | O (매핑할 section 없어 무시) | O | 없음 |
+| 질문 텍스트 변경 | O (name 동일) | O (자동 추출) | O | 없음 |
+| 새 섹션 추가 | O | O (컬럼도 자동 생성) | O | 없음 |
+| 섹션 삭제 | O | O (빌드 안 함, 컬럼은 남음) | O | Notion 컬럼 수동 삭제 |
+| 섹션명 변경 | O | △ (새 컬럼 자동 생성) | O | 기존 Notion 컬럼 수동 삭제 |
+| 프로필 필드명 변경 | **X** (fetch body 깨짐) | **X** (PROFILE_KEYS 하드코딩) | O | index.html fetch body + sync-notion.js 수동 수정 |
+| HTML 구조 변경 (class명 등) | O | **X** (파싱 깨짐) | O | sync-notion.js 정규식 확인 |
+
+> **O** = index.html만 수정하면 자동 적용 / **△** = 새 데이터는 OK, 기존 데이터는 fallback / **X** = 코드 수동 수정 필요
+
+### 기존 데이터 마이그레이션 (옵션 value key 변경 시)
+
+옵션 텍스트를 바꿔도 기존 데이터는 영향 없습니다. 옵션의 **value(key)** 자체를 바꾸는 경우에만 마이그레이션이 필요합니다.
+
+> **주의:** old key → new key 매핑을 자동 추론할 수는 없으므로, 변경 사항을 명시해야 합니다.
+> 실행 전 반드시 `SELECT count(*)` 로 영향 범위를 먼저 확인하세요.
+
+#### Case A: 단일값 필드의 key 변경
+
+```sql
+-- 예: simAccess "rtx4090_plus" → "rtx5090_plus" 로 변경한 경우
+-- 1) 영향 범위 확인
+SELECT count(*) FROM waitlist WHERE form_data->>'simAccess' = 'rtx4090_plus';
+
+-- 2) 마이그레이션 실행
+UPDATE waitlist
+SET form_data = jsonb_set(form_data, '{simAccess}', '"rtx5090_plus"')
+WHERE form_data->>'simAccess' = 'rtx4090_plus';
+```
+
+#### Case B: 배열 필드에서 특정 value 변경
+
+```sql
+-- 예: robotBrand 배열에서 "ur" → "universal_robots" 로 변경한 경우
+-- 1) 영향 범위 확인
+SELECT count(*) FROM waitlist WHERE form_data->'robotBrand' @> '"ur"';
+
+-- 2) 마이그레이션 실행
+UPDATE waitlist
+SET form_data = (
+  SELECT jsonb_set(form_data, '{robotBrand}', (
+    SELECT jsonb_agg(
+      CASE WHEN elem::text = '"ur"' THEN '"universal_robots"'::jsonb ELSE elem END
+    ) FROM jsonb_array_elements(form_data->'robotBrand') AS elem
+  ))
+)
+WHERE form_data->'robotBrand' @> '"ur"';
+```
+
+#### Case C: 필드명(key) 자체를 변경
+
+```sql
+-- 예: form_data 안의 "robotAccess" → "robotOwnership" 으로 변경한 경우
+-- 1) 영향 범위 확인
+SELECT count(*) FROM waitlist WHERE form_data ? 'robotAccess';
+
+-- 2) 마이그레이션 실행
+UPDATE waitlist
+SET form_data = (form_data - 'robotAccess') ||
+  jsonb_build_object('robotOwnership', form_data->'robotAccess')
+WHERE form_data ? 'robotAccess';
+```
+
+### HTML 구조 의존성 (sync-notion.js 파싱 기준)
+
+파싱이 정상 동작하려면 아래 HTML 구조를 유지해야 합니다:
+
+```html
+<div class="form-section">
+  <div class="section-header">
+    <h3 class="section-title">섹션명</h3>
+  </div>
+  <div class="form-group">
+    <label class="form-label">질문 텍스트</label>
+    <input name="fieldKey" value="optionValue">
+    <span class="option-label">옵션 텍스트</span>
+  </div>
+</div>
+```
+
+필수 class:
+- `form-section` — 섹션 경계
+- `section-title` — 섹션명 (→ Notion 컬럼명)
+- `form-label` — 질문 텍스트 (→ 셀 안의 라벨)
+- `option-label` — 옵션 텍스트 (→ 답변 표시)
+
+---
+
 ## 일상 운영 체크리스트
 
 ### 매일

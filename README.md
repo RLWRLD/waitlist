@@ -40,7 +40,6 @@ waitlist/
 │   ├── sync-config.json                # API 키 설정 (gitignored)
 │   ├── sync-config.example.json        # 설정 파일 템플릿
 │   ├── email-template.md               # 이메일 템플릿 레퍼런스
-│   ├── DATA_PIPELINE.md                # 데이터 파이프라인 상세 문서
 │   ├── backups/                        # 일일 백업 저장 (YYYY-MM-DD/)
 │   └── logs/                           # 동기화/백업 로그
 ├── QA/
@@ -180,9 +179,141 @@ cp sync/sync-config.example.json sync/sync-config.json
 | `created_at` | timestamptz | 기록 시각 |
 | `sent_at` | timestamptz | 발송 완료 시각 |
 
+## 데이터 파이프라인 상세
+
+### 폼 데이터 수집 (index.html)
+
+```js
+const formData = new FormData(form);
+formData.delete('website');  // honeypot 제거
+const data = {};
+
+formData.forEach((value, key) => {
+    if (data[key]) {
+        if (Array.isArray(data[key])) {
+            data[key].push(value);       // 3rd+ checkbox → push to array
+        } else {
+            data[key] = [data[key], value]; // 2nd checkbox → convert to array
+        }
+    } else {
+        data[key] = value;               // 1st value → string
+    }
+});
+```
+
+### 저장 규칙
+
+- **Radio inputs**: 하나만 선택 → `string` (e.g., `"academic"`)
+- **Checkbox inputs**: 하나 선택 → `string`, 여러 개 → `array` (e.g., `["franka", "ur"]`)
+- **Text inputs**: 항상 포함, 비어있으면 `""` (빈 문자열)
+- **Conditional fields**: radio/checkbox가 미선택이면 key 자체가 없음, text input은 빈 문자열로 존재
+
+핵심 5개 필드(`email`, `full_name`, `organization`, `country`, `social_profile`)는 개별 컬럼으로 추출 저장하고, 전체 응답은 `form_data` JSONB에 보관합니다.
+
+### form_data 예시
+
+```json
+{
+  "fullName": "홍길동",
+  "email": "hong@kaist.ac.kr",
+  "organization": "KAIST",
+  "country": "KR",
+  "socialProfile": "https://x.com/hong",
+  "affiliation": "academic",
+  "academicRole": "professor",
+  "affiliationOther": "",
+  "industryOther": "",
+  "startupRoleOther": "",
+  "communities": ["lerobot", "ros", "other"],
+  "communitiesOther": "My Community",
+  "robotAccess": "own",
+  "robotType": ["humanoid", "single_arm"],
+  "robotTypeOther": "",
+  "robotBrand": ["franka", "ur"],
+  "robotBrandOther": "",
+  "simAccess": "rtx4090_plus",
+  "useCase": ["benchmark", "finetune"],
+  "applications": ["bin_picking", "assembly"],
+  "applicationsOther": "",
+  "shareWilling": "yes",
+  "shareType": ["content", "testimonial"],
+  "eventAttendance": "kr_inperson",
+  "referralSource": "social",
+  "referralSourceOther": ""
+}
+```
+
+### Notion 자동 추출 (sync-notion.js)
+
+sync-notion.js는 실행 시마다 index.html을 파싱하여 **하드코딩 없이** 아래 정보를 자동 추출합니다:
+
+1. **LABELS** — 옵션 코드 → 텍스트 매핑 (`<input value="...">` + `<span class="option-label">`)
+2. **SECTIONS** — 섹션 구조 + 질문 텍스트 (`<div class="form-section">` + `<h3 class="section-title">` + `<label class="form-label">`)
+3. **SELECT options** — `<select>` 내 `<option value="...">` 텍스트
+
+### Notion 섹션 컬럼 병합 형식
+
+```
+[Question Text]: [Answer Text]
+[Question Text]: [Answer1, Answer2, Answer3]
+[Question Text]: [Answer1, Other: 사용자 입력]
+```
+
+예시 (Who You Are):
+```
+What type of organization are you from?: Academic (University / Research Institute)
+What is your role?: Professor / Principal Investigator
+Which communities are you part of?: LeRobot, ROS Community, Other: My Community
+```
+
+### 필드 매핑 레퍼런스
+
+#### Who You Are
+
+| Question | form_data Key | Type |
+|---|---|---|
+| What type of organization are you from? | `affiliation` | radio |
+| (Other text) | `affiliationOther` | text |
+| What is your role? (Academic) | `academicRole` | radio |
+| What is your role? (Industry) | `industryRole` | radio |
+| Which industry? | `industry` | checkbox (array) |
+| (Other text) | `industryOther` | text |
+| What is your role? (Startup) | `startupRole` | radio |
+| (Other text) | `startupRoleOther` | text |
+| Which communities are you part of? | `communities` | checkbox (array) |
+| (Other text) | `communitiesOther` | text |
+
+#### Robot & Hardware
+
+| Question | form_data Key | Type |
+|---|---|---|
+| Do you have access to a robot? | `robotAccess` | radio |
+| Robot Type(s) | `robotType` | checkbox (array) |
+| (Other text) | `robotTypeOther` | text |
+| Robot Brand(s) | `robotBrand` | checkbox (array) |
+| (Other text) | `robotBrandOther` | text |
+| Do you have access to a simulation environment? | `simAccess` | radio |
+
+#### Interest in RLDX
+
+| Question | form_data Key | Type |
+|---|---|---|
+| What do you want to do with RLDX? | `useCase` | checkbox (array) |
+| What tasks are you interested in? | `applications` | checkbox (array) |
+| (Other text) | `applicationsOther` | text |
+| Would you share your experience publicly? | `shareWilling` | radio |
+| How would you like to share? | `shareType` | checkbox (array) |
+
+#### Event & Engagement
+
+| Question | form_data Key | Type |
+|---|---|---|
+| Would you attend an RLDX launch event? | `eventAttendance` | radio |
+| How did you hear about RLDX? | `referralSource` | radio |
+| (Other text) | `referralSourceOther` | text |
+
 ## 관련 문서
 
 - [SUPABASE_SETUP.md](SUPABASE_SETUP.md) — Supabase 테이블/RLS 초기 설정
-- [OPERATIONS.md](OPERATIONS.md) — 운영/인수인계 가이드 (외부 서비스 세팅, 로그인 정보)
-- [sync/DATA_PIPELINE.md](sync/DATA_PIPELINE.md) — 데이터 파이프라인 상세 구조
+- [OPERATIONS.md](OPERATIONS.md) — 운영/인수인계 가이드 (외부 서비스 세팅, 데이터 파이프라인, 유지보수)
 - [sync/email-template.md](sync/email-template.md) — 이메일 템플릿 레퍼런스
