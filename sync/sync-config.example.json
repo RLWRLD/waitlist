@@ -6,5 +6,9 @@
   "notion": {
     "token": "YOUR_NOTION_API_TOKEN",
     "databaseId": "YOUR_NOTION_DATABASE_ID"
+  },
+  "slack": {
+    "webhookUrl": "YOUR_SLACK_WEBHOOK_URL",
+    "enabled": true
   }
 }

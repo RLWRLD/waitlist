@@ -454,6 +454,66 @@ function printPreview(row) {
 }
 
 // ============================================
+// Slack — Notify on new signups
+// ============================================
+
+const NOTION_DASHBOARD_URL = 'https://www.notion.so/RLDX-Launch-List-dashboard-3116cbdff6f68034a159fbf50dcd0230';
+
+/** Extract role label from form_data (full label, no stripping) */
+function getRole(fd) {
+  const aff = fd.affiliation;
+  if (!aff) return '';
+  const ROLE_KEYS = { academic: 'academicRole', industry: 'industryRole', startup: 'startupRole' };
+  const roleKey = ROLE_KEYS[aff];
+  const roleVal = roleKey ? fd[roleKey] : null;
+  if (!roleVal) return '';
+  return resolveLabel(roleKey, roleVal);
+}
+
+function buildSlackMessage(newRows, totalCount) {
+  const count = newRows.length;
+  const header = `*새로운 리스트가 등록되었어요! (+${count})*`;
+
+  const entries = newRows.map((row) => {
+    const fd = row.form_data || {};
+    const id = row.id;
+    const name = row.full_name || fd.fullName || 'Unknown';
+    const org = row.organization || fd.organization || '';
+    const role = getRole(fd);
+    const social = row.social_profile || fd.socialProfile || '';
+    const displayName = social && social.startsWith('http') ? `<${social}|${name}>` : name;
+    const parts = [`#${id} ${displayName}`];
+    if (org) parts.push(org);
+    if (role) parts.push(role);
+    return parts.join(' · ');
+  });
+
+  const lines = [header, '', ...entries, '', `총 대기자: ${totalCount}명`, NOTION_DASHBOARD_URL];
+  return lines.join('\n');
+}
+
+async function sendSlackNotification(newRows, totalCount) {
+  if (!CONFIG.slack?.enabled || !CONFIG.slack?.webhookUrl) return;
+
+  const text = buildSlackMessage(newRows, totalCount);
+
+  try {
+    const res = await fetch(CONFIG.slack.webhookUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text }),
+    });
+    if (!res.ok) {
+      console.error(`  Slack notification failed: ${res.status} ${await res.text()}`);
+    } else {
+      console.log('  Slack notification sent.');
+    }
+  } catch (err) {
+    console.error(`  Slack notification error: ${err.message}`);
+  }
+}
+
+// ============================================
 // Main
 // ============================================
 
@@ -532,6 +592,13 @@ async function main() {
       console.error(`  ✗ Failed: ${name} (${email}) — ${err.message}`);
       failed++;
     }
+  }
+
+  // Slack notification for successfully created entries
+  if (created > 0 && !DRY_RUN) {
+    const successRows = newRows.slice(0, created);
+    const totalCount = existingEmails.size + created;
+    await sendSlackNotification(successRows, totalCount);
   }
 
   // Summary
